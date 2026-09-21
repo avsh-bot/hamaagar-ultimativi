@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>המאגר האולטימטיבי · מבחני תרגול מחזור 29</title>
+<meta name="description" content="מבחני תרגול וסיכומים לרפואת חירום, מחזור 29, אוניברסיטת בן-גוריון">
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{
+  --orange:#E5942F;
+  --orange-deep:#C97A1B;
+  --navy:#163B5C;
+  --navy-deep:#0E2A44;
+  --ink:#101E2B;
+  --ink-2:#44586B;
+  --muted:#6F7F8D;
+  --ground:#F2F3F1;
+  --surface:#FFFFFF;
+  --line:#D9DDE1;
+  --green:#1F8F5F;
+  --display:'Karantina','Arial Hebrew',Impact,sans-serif;
+  --text:'Arial Hebrew','Segoe UI',system-ui,Arial,sans-serif;
+  --focus:0 0 0 3px #fff, 0 0 0 6px var(--orange);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{font-family:var(--text);font-size:17px;line-height:1.5;color:var(--ink);background:var(--ground);-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;color:inherit}
+a{color:inherit}
+:focus-visible{outline:none;box-shadow:var(--focus)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* top bar */
+.top{background:var(--navy);color:#fff}
+.top .wrap{display:flex;align-items:center;gap:16px;min-height:64px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand img{width:44px;height:44px;background:#fff;border-radius:50%;padding:2px}
+.brand b{font-family:var(--display);font-weight:700;font-size:28px;line-height:1;letter-spacing:.01em}
+.brand span{display:block;font-size:13px;opacity:.8;line-height:1.2;margin-top:2px}
+.search{margin-inline-start:auto;position:relative;width:min(380px,100%)}
+.search input{
+  width:100%;height:44px;border:2px solid transparent;border-radius:6px;background:var(--navy-deep);
+  color:#fff;padding:0 42px 0 14px;font:inherit;font-size:16px;
+}
+.search input::placeholder{color:rgba(255,255,255,.6)}
+.search input:focus{border-color:var(--orange);box-shadow:none;outline:none}
+.search svg{position:absolute;inset-inline-start:auto;inset-inline-end:14px;top:13px;width:18px;height:18px;color:rgba(255,255,255,.7);pointer-events:none}
+
+/* orange band */
+.band{background:var(--orange);color:var(--navy);position:relative}
+.band .wrap{padding-top:44px;padding-bottom:36px}
+.band h1{font-family:var(--display);font-weight:700;font-size:clamp(64px,10vw,132px);line-height:.88;max-width:14ch;letter-spacing:.005em}
+.band p{margin-top:18px;font-size:19px;max-width:44ch;color:var(--navy-deep);font-weight:500}
+.ecg{display:block;width:100%;height:56px;color:#fff}
+.ecg path{fill:none;stroke:currentColor;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round;
+  stroke-dasharray:2400;stroke-dashoffset:2400;animation:draw 1.8s cubic-bezier(.4,0,.2,1) .2s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){.ecg path{animation:none;stroke-dashoffset:0}}
+
+/* chooser (sticky) */
+.chooser{position:sticky;top:0;z-index:20;background:var(--orange);border-bottom:3px solid var(--navy)}
+.chooser .wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
+.group{display:flex;gap:6px;background:rgba(14,42,68,.12);padding:4px;border-radius:8px}
+.group button{
+  min-height:44px;padding:0 18px;border:0;border-radius:6px;background:transparent;color:var(--navy);font-weight:700;font-size:16px;
+  transition:background-color .15s;
+}
+.group button:hover:not(:disabled){background:rgba(255,255,255,.35)}
+.group button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.group button:disabled{color:rgba(22,59,92,.55);cursor:not-allowed}
+.group button:disabled small{font-weight:600;font-size:12px;margin-inline-start:6px;opacity:.9}
+.group button:focus-visible{box-shadow:0 0 0 3px var(--orange),0 0 0 6px var(--navy)}
+.chooser .hint{margin-inline-start:auto;font-size:15px;font-weight:600;color:var(--navy-deep)}
+
+/* catalog */
+.catalog{padding:24px 0 72px}
+.semhead{font-family:var(--display);font-weight:700;font-size:44px;color:var(--navy);margin:32px 0 6px;line-height:1}
+.subject{display:grid;grid-template-columns:250px 1fr;gap:12px 32px;padding:20px 0;border-top:1px solid var(--line);align-items:start}
+.subject:first-child{border-top:0}
+.subject h2{font-family:var(--display);font-weight:700;font-size:34px;line-height:1;color:var(--navy);padding-top:8px;overflow-wrap:anywhere}
+.items{display:flex;flex-wrap:wrap;gap:10px}
+.item{
+  display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:6px 16px 6px 18px;border-radius:6px;
+  border:2px solid var(--navy);background:var(--navy);color:#fff;font-weight:600;font-size:16.5px;text-align:start;
+  transition:background-color .15s,border-color .15s;
+}
+.item:hover{background:var(--navy-deep);border-color:var(--navy-deep)}
+.item.sum{background:var(--surface);color:var(--navy)}
+.item.sum:hover{background:#EEF2F6}
+.item .kind{font-size:12px;font-weight:700;letter-spacing:.02em;padding:2px 7px;border-radius:4px;background:rgba(255,255,255,.18)}
+.item.sum .kind{background:var(--navy);color:#fff}
+.item .flag{font-size:12.5px;font-weight:600;color:#FFD9A8}
+.item .arrow{width:16px;height:16px;flex-shrink:0;margin-inline-start:2px}
+.item.soon{background:transparent;border:2px dashed var(--line);color:var(--muted);cursor:default;font-weight:500}
+.item.soon .kind{background:#E6E9EC;color:var(--muted)}
+.item.soon .flag{color:var(--muted)}
+.empty{padding:48px 24px;border:2px dashed var(--line);border-radius:8px;text-align:start;margin-top:24px}
+.empty b{display:block;font-family:var(--display);font-size:36px;color:var(--navy);line-height:1;margin-bottom:8px}
+.empty button{margin-top:14px;min-height:44px;padding:0 18px;border-radius:6px;border:2px solid var(--navy);background:#fff;color:var(--navy);font-weight:700}
+
+/* footer */
+footer{background:var(--navy);color:rgba(255,255,255,.85);padding:28px 0 40px;font-size:15px}
+footer .wrap{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+footer img{width:40px;height:40px;background:#fff;border-radius:50%;padding:2px}
+footer .mail{margin-inline-start:auto}
+footer a{color:#fff;text-decoration-color:var(--orange);text-underline-offset:3px}
+
+/* loading */
+.loading{position:fixed;inset:0;background:rgba(16,30,43,.55);z-index:99;display:none;align-items:center;justify-content:center}
+.loading.show{display:flex}
+.loading div{background:#fff;color:var(--navy);padding:22px 30px;border-radius:8px;font-weight:700;font-size:18px;display:flex;align-items:center;gap:14px}
+.spin{width:22px;height:22px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--orange);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+
+/* responsive */
+@media (max-width:760px){
+  .wrap{padding:0 16px}
+  .brand span span{display:none}
+  .chooser{position:static}
+  .search{width:100%;order:3}
+  .band .wrap{padding-top:28px;padding-bottom:24px}
+  .band p{font-size:17px}
+  .ecg{height:40px}
+  .chooser .hint{display:none}
+  .group{flex:1}
+  .group button{flex:1;padding:0 8px;font-size:15px}
+  .subject{grid-template-columns:1fr;gap:10px;padding:18px 0}
+  .subject h2{font-size:30px;padding-top:0}
+  .semhead{font-size:38px}
+  .item{width:100%;justify-content:flex-start}
+  .item .arrow{margin-inline-start:auto}
+}
+
+footer .admin{font-size:13px;color:rgba(255,255,255,.55);text-decoration:none;border:1px solid rgba(255,255,255,.25);border-radius:6px;padding:4px 10px}
+footer .admin:hover{color:#fff;border-color:#fff}
+.item[href]{text-decoration:none}
+</style>
+</head>
+<body>
+
+<div id="loadingModal" class="loading" role="status" aria-live="polite"><div><span class="spin" aria-hidden="true"></span>פותח את המבחן…</div></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#">
+      <img src="assets/logo.png" alt="">
+      <span><b>המאגר האולטימטיבי</b><span>רפואת חירום, מחזור 29, אוניברסיטת בן-גוריון</span></span>
+    </a>
+    <label class="search">
+      <input id="q" type="search" placeholder="חיפוש לפי נושא או שם מבחן" autocomplete="off" aria-label="חיפוש לפי נושא או שם מבחן">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    </label>
+  </div>
+</header>
+
+<section class="band">
+  <div class="wrap">
+    <h1>כלל מבחני התרגול האינטרקטיביים של רפו״ח</h1>
+    <p>בוחרים שנה, סמסטר ונושא, בוחרים מבחן ומתחילים לתרגל. האתר והמבחנים נועדו בכדי לתרגל בצורה יותר אינטרקטיבית ונוחה את החומר הלימודי של תואר רפואת חירום, התרגול פתוח לכולם ללא הרשמה ונועד בשבילכם, השתמשו בתבונה:) להערות ושיפורים מוזמנים לכתוב למייסד האתר וכותב המבחנים אביב במייל שרשום בסוף הקובץ</p>
+  </div>
+  <svg class="ecg" viewBox="0 0 1400 56" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 34 H40 C50 26 60 26 70 34 H95 l5 3 l6 -30 l6 36 l5 -9 H150 C165 20 185 20 200 34 H320 C330 26 340 26 350 34 H375 l5 3 l6 -30 l6 36 l5 -9 H430 C445 20 465 20 480 34 H600 C610 26 620 26 630 34 H655 l5 3 l6 -30 l6 36 l5 -9 H710 C725 20 745 20 760 34 H880 C890 26 900 26 910 34 H935 l5 3 l6 -30 l6 36 l5 -9 H990 C1005 20 1025 20 1040 34 H1160 C1170 26 1180 26 1190 34 H1215 l5 3 l6 -30 l6 36 l5 -9 H1270 C1285 20 1305 20 1320 34 H1400"/>
+  </svg>
+</section>
+
+<div class="chooser">
+  <div class="wrap">
+    <div class="group" role="group" aria-label="שנה">
+      <button data-year="year1" aria-pressed="true">שנה א׳</button>
+      <button data-year="year2" aria-pressed="false" disabled>שנה ב׳<small>בקרוב</small></button>
+      <button data-year="year3" aria-pressed="false" disabled>שנה ג׳<small>בקרוב</small></button>
+    </div>
+    <div class="group" role="group" aria-label="סמסטר">
+      <button aria-pressed="true" data-sem="1">סמסטר א׳</button>
+      <button aria-pressed="false" data-sem="2">סמסטר ב׳</button>
+      <button aria-pressed="false" data-sem="all">שני הסמסטרים</button>
+    </div>
+    <div class="hint" id="hint"></div>
+  </div>
+</div>
+
+<main class="catalog">
+  <div class="wrap" id="list"></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <img src="assets/logo.png" alt="">
+    <div>אתר מבחנים תרגול אינטרקטיביים לתואר רפואת חירום, מחזור 29.<br>למייל הערות, שאלות וקשיים:</div>
+    <div class="mail"><a href="mailto:aviv18052004@gmail.com">aviv18052004@gmail.com</a></div>
+    <a class="admin" href="admin.html" aria-label="ניהול">ניהול</a>
+  </div>
+</footer>
+
+<script>
+const BUILTIN = {"years":{"year1":"שנה א׳","year2":"שנה ב׳","year3":"שנה ג׳"},"items":[{"id":"b1","year":"year1","sem":1,"subject":"כימיה","name":"כימיה","type":"מבחן","status":"empty","builtin":true},{"id":"b2","year":"year1","sem":1,"subject":"ביולוגיה","name":"ביולוגיה","type":"מבחן","status":"empty","builtin":true},{"id":"b3","year":"year1","sem":1,"subject":"אפידמיולוגיה חלק א׳","name":"אפידמיולוגיה חלק א׳","type":"מבחן","status":"empty","builtin":true},{"id":"b4","year":"year1","sem":1,"subject":"אנטומיה כללית","name":"אנטומיה כללית","type":"מבחן","status":"empty","builtin":true},{"id":"b5","year":"year1","sem":1,"subject":"EMT","name":"EMT","type":"מבחן","status":"empty","builtin":true},{"id":"b6","year":"year1","sem":1,"subject":"היסטולוגיה ופתולוגיה","name":"היסטולוגיה ופתולוגיה","type":"מבחן","status":"empty","builtin":true},{"id":"b7","year":"year1","sem":1,"subject":"מיקרוביולוגיה, אימונולוגיה ווירולוגיה","name":"מיקרוביולוגיה, אימונולוגיה ווירולוגיה","type":"מבחן","status":"empty","builtin":true},{"id":"b8","year":"year1","sem":1,"subject":"המטולוגיה","name":"המטולוגיה","type":"מבחן","status":"empty","builtin":true},{"id":"b9","year":"year1","sem":1,"subject":"פרמקולוגיה","name":"פרמקולוגיה","type":"מבחן","status":"empty","builtin":true},{"id":"b10","year":"year1","sem":2,"subject":"קרדיולוגיה","name":"קרדיולוגיה","type":"מבחן","status":"empty","builtin":true},{"id":"b11","year":"year1","sem":2,"subject":"נשימה","name":"נשימה","type":"מבחן","status":"empty","builtin":true},{"id":"b12","year":"year1","sem":2,"subject":"ביוכימיה","name":"ביוכימיה","type":"מבחן","status":"empty","builtin":true},{"id":"b13","year":"year1","sem":2,"subject":"אפידמיולוגיה חלק ב׳","name":"אפידמיולוגיה חלק ב׳","type":"מבחן","status":"empty","builtin":true},{"id":"b14","year":"year1","sem":2,"subject":"נוירואנטומיה","name":"נוירואנטומיה","type":"מבחן","status":"empty","builtin":true},{"id":"b15","year":"year1","sem":2,"subject":"נפרולוגיה","name":"נפרולוגיה","type":"מבחן","status":"empty","builtin":true},{"id":"b16","year":"year1","sem":2,"subject":"גסטרואנטרולוגיה","name":"גסטרואנטרולוגיה","type":"מבחן","status":"empty","builtin":true},{"id":"b17","year":"year1","sem":2,"subject":"פתופיזיולוגיה של טראומה","name":"פתופיזיולוגיה של טראומה","type":"מבחן","status":"empty","builtin":true}]};
+const state = { year: 'year1', sem: '1', q: '', items: BUILTIN.items };
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const openable = c => c.status !== 'empty' && !!c.url;
+const ARROW = `<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m11 6-6 6 6 6"/></svg>`;
+
+function item(c){
+  const kind = `<span class="kind">${esc(c.type)}</span>`;
+  if (!openable(c)) return `<span class="item soon">${kind}<span>${esc(c.name)}</span><span class="flag">בקרוב</span></span>`;
+  const flag = c.status === 'pending' ? `<span class="flag">בבדיקה</span>` : '';
+  return `<a class="item ${c.type === 'סיכום' ? 'sum' : ''}" href="${esc(c.url)}">${kind}<span>${esc(c.name)}</span>${flag}${ARROW}</a>`;
+}
+
+// Group a flat item list by subject, keeping first-seen order.
+function groupBySubject(items){
+  const map = new Map();
+  items.forEach(i => { if (!map.has(i.subject)) map.set(i.subject, []); map.get(i.subject).push(i); });
+  return [...map.entries()].map(([subject, courses]) => {
+    // once a course has a real exam, its "בקרוב" placeholder disappears
+    const hasReal = courses.some(openable);
+    return { subject, courses: hasReal ? courses.filter(c => c.status !== 'empty') : courses };
+  });
+}
+
+function block(subjects){
+  return subjects.map(s => `<section class="subject"><h2>${esc(s.subject)}</h2><div class="items">${s.courses.map(item).join('')}</div></section>`).join('');
+}
+
+function render(){
+  const q = state.q.trim().toLowerCase();
+  const sems = state.sem === 'all' ? [[1,'סמסטר א׳'],[2,'סמסטר ב׳']] : [[+state.sem, null]];
+  let total = 0, html = '';
+  sems.forEach(([sem, label]) => {
+    const items = state.items.filter(i => i.year === state.year && i.sem === sem && (!q || (i.subject + ' ' + i.name).toLowerCase().includes(q)));
+    total += items.filter(openable).length;
+    if (!items.length) return;
+    html += (label ? `<h2 class="semhead">${label}</h2>` : '') + block(groupBySubject(items));
+  });
+  if (!html){
+    html = q
+      ? `<div class="empty"><b>לא נמצא מבחן בשם הזה</b>נסו שם של נושא, למשל ״נפרולוגיה״ או ״פרמקולוגיה״.<br><button id="clear">נקו את החיפוש</button></div>`
+      : `<div class="empty"><b>אין כאן מבחנים עדיין</b>לא הועלו מבחנים לסמסטר הזה. נסו סמסטר אחר, או חזרו בקרוב.</div>`;
+  }
+  $('#list').innerHTML = html;
+  $('#hint').textContent = total === 0 ? 'עוד לא הועלו מבחנים' : total === 1 ? 'מבחן אחד פתוח' : total + ' מבחנים וסיכומים פתוחים';
+}
+
+function syncYears(){
+  document.querySelectorAll('[data-year]').forEach(b => {
+    const has = state.items.some(i => i.year === b.dataset.year);
+    b.disabled = !has;
+    const soon = b.querySelector('small');
+    if (soon) soon.hidden = has;
+    b.setAttribute('aria-pressed', String(b.dataset.year === state.year));
+  });
+}
+document.querySelectorAll('[data-year]').forEach(b => b.addEventListener('click', () => {
+  if (b.disabled) return;
+  state.year = b.dataset.year; syncYears(); render();
+}));
+
+document.querySelectorAll('[data-sem]').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('[data-sem]').forEach(x => x.setAttribute('aria-pressed', x === b));
+  state.sem = b.dataset.sem; render();
+}));
+$('#q').addEventListener('input', e => { state.q = e.target.value; render(); });
+$('#list').addEventListener('click', e => {
+  if (e.target.id === 'clear'){ $('#q').value = ''; state.q = ''; render(); $('#q').focus(); }
+});
+syncYears();
+render();
+
+// When deployed, merge exams uploaded through the admin page. Fails silently when opened as a local file.
+fetch('/api/catalog', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(j => {
+  if (j && Array.isArray(j.items) && j.items.length) { state.items = j.items; syncYears(); render(); }
+}).catch(() => {});
+</script>
+</body>
+</html>

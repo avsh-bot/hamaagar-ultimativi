@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ניהול · המאגר האולטימטיבי</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{
+  --orange:#E5942F;--navy:#163B5C;--navy-deep:#0E2A44;--ink:#101E2B;--ink-2:#44586B;--muted:#6F7F8D;
+  --ground:#F2F3F1;--surface:#fff;--line:#D9DDE1;--green:#1F8F5F;--red:#B63A2E;
+  --display:'Karantina','Arial Hebrew',Impact,sans-serif;
+  --text:'Assistant','Arial Hebrew','Segoe UI',system-ui,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--text);font-size:17px;line-height:1.5;color:var(--ink);background:var(--ground);-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:none;box-shadow:0 0 0 3px #fff,0 0 0 6px var(--orange)}
+.wrap{max-width:900px;margin:0 auto;padding:0 24px}
+.top{background:var(--navy);color:#fff;border-bottom:3px solid var(--orange)}
+.top .wrap{display:flex;align-items:center;gap:12px;min-height:60px}
+.top img{width:36px;height:36px;border-radius:50%;background:#fff;padding:2px}
+.top b{font-family:var(--display);font-size:26px;font-weight:700;line-height:1}
+.top a{color:#fff;text-decoration:none;font-weight:600;font-size:15px;margin-inline-start:auto}
+h1{font-family:var(--display);font-weight:700;font-size:56px;line-height:.9;color:var(--navy);margin:36px 0 8px}
+h2{font-family:var(--display);font-weight:700;font-size:32px;line-height:1;color:var(--navy);margin:0 0 14px}
+p.lede{color:var(--ink-2);max-width:60ch;margin-bottom:24px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:22px;margin-bottom:22px}
+label{display:block;font-weight:600;font-size:15px;margin-bottom:6px}
+input[type=text],input[type=password],select{width:100%;min-height:46px;border:2px solid var(--line);border-radius:6px;padding:0 12px;background:#fff}
+input:focus,select:focus{border-color:var(--navy)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px}
+.grid .full{grid-column:1/-1}
+.field{margin-bottom:4px}
+.file{border:2px dashed var(--line);border-radius:8px;padding:18px;text-align:center;color:var(--ink-2);cursor:pointer;background:#fff}
+.file.has{border-style:solid;border-color:var(--green);color:var(--ink)}
+.file input{display:none}
+.btn{min-height:46px;padding:0 20px;border-radius:6px;border:2px solid var(--navy);background:var(--navy);color:#fff;font-weight:700;font-size:16px}
+.btn:hover{background:var(--navy-deep)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.ghost{background:#fff;color:var(--navy)}
+.btn.danger{border-color:var(--red);color:var(--red);background:#fff}
+.btn.danger:hover{background:#FBEEEC}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:16px}
+.msg{padding:12px 14px;border-radius:6px;font-weight:600;margin-top:14px;display:none}
+.msg.ok{display:block;background:#E3F3EB;color:var(--green)}
+.msg.err{display:block;background:#FBEEEC;color:var(--red)}
+.hidden{display:none}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:start;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:700;color:var(--ink-2);font-size:13.5px}
+td .k{font-size:12px;font-weight:700;padding:2px 7px;border-radius:4px;background:#EEF1F4;color:var(--ink-2)}
+td .k.sum{background:#FBE9D2;color:#9A5E12}
+td a{color:var(--navy)}
+td button{min-height:34px;padding:0 10px;font-size:14px}
+.note{font-size:14px;color:var(--muted);margin-top:10px}
+.pill{display:inline-block;font-size:13px;font-weight:600;padding:2px 9px;border-radius:4px;background:#FBE9D2;color:#9A5E12}
+.pill.on{background:#E3F3EB;color:var(--green)}
+@media (max-width:640px){.grid{grid-template-columns:1fr}.wrap{padding:0 16px}h1{font-size:44px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><img src="assets/logo.png" alt=""><b>המאגר האולטימטיבי</b><a href="./">חזרה למאגר</a></div></header>
+
+<main class="wrap">
+  <h1>ניהול המאגר</h1>
+  <p class="lede">מכאן מעלים מבחנים וסיכומים חדשים. קובץ ה-HTML עובר אוטומטית את אותו עיצוב כמו שאר המבחנים, ומופיע במאגר מיד.</p>
+
+  <section class="card" id="gate">
+    <h2>כניסה</h2>
+    <div class="field"><label for="pw">סיסמה</label><input id="pw" type="password" autocomplete="current-password" inputmode="numeric"></div>
+    <div class="row"><button class="btn" id="login">כניסה</button></div>
+    <div class="msg" id="gateMsg"></div>
+  </section>
+
+  <div id="panel" class="hidden">
+    <section class="card">
+      <h2>העלאת מבחן או סיכום</h2>
+      <div class="grid">
+        <div class="field"><label for="year">שנה</label>
+          <select id="year"><option value="year1">שנה א׳</option><option value="year2">שנה ב׳</option><option value="year3">שנה ג׳</option></select></div>
+        <div class="field"><label for="sem">סמסטר</label>
+          <select id="sem"><option value="1">סמסטר א׳</option><option value="2">סמסטר ב׳</option></select></div>
+        <div class="field"><label for="subject">נושא (כותרת הקבוצה במאגר)</label>
+          <input id="subject" type="text" list="subjects" placeholder="למשל: נפרולוגיה"><datalist id="subjects"></datalist></div>
+        <div class="field"><label for="name">שם המבחן כפי שיופיע על הכפתור</label>
+          <input id="name" type="text" placeholder="למשל: נפרולוגיה - מבחן תרגול"></div>
+        <div class="field"><label for="type">סוג</label>
+          <select id="type"><option value="מבחן">מבחן</option><option value="סיכום">סיכום</option></select></div>
+        <div class="field"><label for="status">מצב</label>
+          <select id="status"><option value="ready">זמין</option><option value="pending">בבדיקה</option></select></div>
+        <div class="full">
+          <label class="file" id="drop"><input id="file" type="file" accept=".html,.htm,text/html"><span id="fileLbl">בחרו קובץ HTML או גררו אותו לכאן</span></label>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn" id="send" disabled>העלאה למאגר</button>
+        <label style="margin:0;font-weight:500;font-size:15px;display:flex;gap:8px;align-items:center"><input type="checkbox" id="restyle" checked> להתאים את העיצוב אוטומטית</label>
+      </div>
+      <div class="msg" id="upMsg"></div>
+      <p class="note">גודל מקסימלי לקובץ: 4MB. הקובץ נשמר ב-Vercel Blob, ולא בקוד של האתר.</p>
+    </section>
+
+    <section class="card">
+      <h2>מה יש במאגר עכשיו</h2>
+      <p class="note" id="blobNote"></p>
+      <table id="tbl"><thead><tr><th>נושא</th><th>שם</th><th>סוג</th><th>מצב</th><th></th></tr></thead><tbody></tbody></table>
+    </section>
+  </div>
+</main>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let password = sessionStorage.getItem('mg-admin') || '';
+let fileText = '';
+
+function show(el, kind, text){ el.className = 'msg ' + kind; el.textContent = text; }
+
+async function api(path, body){
+  try {
+    const r = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password, ...body }) });
+    let j = {}; try { j = await r.json(); } catch(e){}
+    if (r.status === 401) sessionStorage.removeItem('mg-admin');
+    return { ok: r.ok && j.ok !== false, status: r.status, ...j };
+  } catch (e) {
+    return { ok: false, status: 0, error: 'אין חיבור לשרת' };
+  }
+}
+
+const NO_SERVER = 'הדף הזה פתוח כקובץ מהמחשב, בלי שרת, ולכן הניהול לא יכול לעבוד. פתחו את הכתובת של האתר ב-Vercel, או הריצו מקומית: node scripts/dev-server.js';
+
+async function loadCatalog(){
+  const tb = $('#tbl tbody');
+  let j;
+  try {
+    const r = await fetch('/api/catalog', { cache: 'no-store' });
+    j = await r.json();
+  } catch (e) {
+    tb.innerHTML = '<tr><td colspan="5">' + (location.protocol === 'file:' ? NO_SERVER : 'לא הצלחתי לטעון את הקטלוג מהשרת.') + '</td></tr>';
+    return;
+  }
+  const subjects = [...new Set(j.items.map(i => i.subject))];
+  $('#subjects').innerHTML = subjects.map(s => `<option value="${esc(s)}">`).join('');
+  $('#blobNote').textContent = j.hasBlob ? '' : 'שימו לב: אין Blob store מחובר לפרויקט, לכן העלאות לא יעבדו עדיין. חברו Storage → Blob בהגדרות הפרויקט ב-Vercel.';
+  tb.innerHTML = j.items.map(i => {
+    const st = i.status === 'empty' ? 'בקרוב' : i.status === 'pending' ? 'בבדיקה' : 'זמין';
+    // an item is built-in when the catalog says so; older entries fall back to the id prefix
+    const builtin = i.builtin !== undefined ? !!i.builtin : String(i.id).startsWith('b');
+    const act = `<button class="btn danger" data-id="${esc(i.id)}">${builtin ? 'הסתרה' : 'מחיקה'}</button>`;
+    return `<tr><td>${esc(i.subject)}</td><td>${i.url ? `<a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.name)}</a>` : esc(i.name)}${builtin ? '' : ' <span class="pill on">הועלה</span>'}</td><td><span class="k ${i.type === 'סיכום' ? 'sum' : ''}">${esc(i.type)}</span></td><td>${st} · שנה ${String(i.year).replace('year','')} סמסטר ${i.sem}</td><td>${act}</td></tr>`;
+  }).join('');
+}
+
+async function login(){
+  const pw = $('#pw').value.trim();
+  if (!pw) return show($('#gateMsg'), 'err', 'צריך להזין סיסמה');
+  password = pw;
+  $('#login').disabled = true;
+  show($('#gateMsg'), 'ok', 'בודק…');
+  const r = await api('/api/remove', { id: '__login_check__' });
+  $('#login').disabled = false;
+  if (r.status === 0) return show($('#gateMsg'), 'err', location.protocol === 'file:' ? NO_SERVER : 'אין חיבור לשרת. נסו לרענן את הדף.');
+  if (r.status === 401 || r.error === 'סיסמה שגויה') return show($('#gateMsg'), 'err', 'סיסמה שגויה');
+  sessionStorage.setItem('mg-admin', password);
+  $('#gate').classList.add('hidden'); $('#panel').classList.remove('hidden');
+  if (r.status >= 500) show($('#upMsg'), 'err', 'שימו לב: השרת החזיר שגיאה (' + r.status + '). ייתכן שהעלאה ומחיקה לא יעבדו.');
+  loadCatalog();
+}
+$('#login').addEventListener('click', login);
+$('#pw').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+if (password) { $('#pw').value = password; login(); }
+
+function takeFile(f){
+  if (!f) return;
+  f.text().then(t => {
+    fileText = t; $('#fileLbl').textContent = f.name + ' (' + Math.round(f.size/1024) + 'KB)';
+    $('#drop').classList.add('has'); $('#send').disabled = false;
+    if (!$('#name').value) { const m = t.match(/<title>([^<]*)/); if (m) $('#name').value = m[1].replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,'').trim(); }
+  });
+}
+$('#file').addEventListener('change', e => takeFile(e.target.files[0]));
+$('#drop').addEventListener('dragover', e => { e.preventDefault(); });
+$('#drop').addEventListener('drop', e => { e.preventDefault(); takeFile(e.dataTransfer.files[0]); });
+
+$('#send').addEventListener('click', async () => {
+  const body = { year: $('#year').value, sem: +$('#sem').value, subject: $('#subject').value.trim(), name: $('#name').value.trim(),
+                 type: $('#type').value, status: $('#status').value, html: fileText, restyle: $('#restyle').checked };
+  if (!body.subject || !body.name) return show($('#upMsg'), 'err', 'חסר נושא או שם');
+  $('#send').disabled = true; show($('#upMsg'), 'ok', 'מעלה…');
+  const r = await api('/api/upload', body);
+  $('#send').disabled = false;
+  if (!r.ok) return show($('#upMsg'), 'err', r.error || 'ההעלאה נכשלה');
+  show($('#upMsg'), 'ok', 'הועלה. המבחן כבר מופיע במאגר.');
+  fileText = ''; $('#file').value = ''; $('#fileLbl').textContent = 'בחרו קובץ HTML או גררו אותו לכאן'; $('#drop').classList.remove('has'); $('#name').value = ''; $('#send').disabled = true;
+  loadCatalog();
+});
+
+$('#tbl').addEventListener('click', async e => {
+  const b = e.target.closest('button[data-id]'); if (!b) return;
+  if (!confirm('בטוח? ' + b.textContent)) return;
+  b.disabled = true;
+  const r = await api('/api/remove', { id: b.dataset.id });
+  b.disabled = false;
+  if (!r.ok) alert(r.error || (r.status === 0 ? 'אין חיבור לשרת' : 'הפעולה נכשלה (' + r.status + ')'));
+  loadCatalog();
+});
+</script>
+</body>
+</html>

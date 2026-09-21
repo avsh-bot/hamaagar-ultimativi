@@ -1,0 +1,14 @@
+{
+  "name": "hamaagar-haultimativi",
+  "version": "2.0.0",
+  "private": true,
+  "description": "המאגר האולטימטיבי – מבחני תרגול, רפואת חירום מחזור 29",
+  "scripts": {
+    "sync": "node scripts/sync-catalog.js",
+    "build:exams": "node scripts/build-exams.js",
+    "dev": "node scripts/dev-server.js"
+  },
+  "dependencies": {
+    "@vercel/blob": "^0.27.0"
+  }
+}
