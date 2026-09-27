@@ -28,9 +28,10 @@ async function writeOverrides(ov) {
 
 // Shared password check. Returns an error string, or null when the request may proceed.
 function checkPassword(body) {
-  const expected = process.env.ADMIN_PASSWORD;
+  const expected = (process.env.ADMIN_PASSWORD || '').trim();
   if (!expected) return 'לא הוגדרה סיסמת ניהול בשרת. הוסיפו ADMIN_PASSWORD ב-Vercel תחת Settings → Environment Variables, ואז Redeploy.';
-  if (!body || body.password !== expected) return 'סיסמה שגויה';
+  const given = String((body && body.password) || '').trim();
+  if (given !== expected) return 'סיסמה שגויה';
   return null;
 }
 

@@ -84,8 +84,9 @@ td button{min-height:34px;padding:0 10px;font-size:14px}
           <select id="year"><option value="year1">שנה א׳</option><option value="year2">שנה ב׳</option><option value="year3">שנה ג׳</option></select></div>
         <div class="field"><label for="sem">סמסטר</label>
           <select id="sem"><option value="1">סמסטר א׳</option><option value="2">סמסטר ב׳</option></select></div>
-        <div class="field"><label for="subject">נושא (כותרת הקבוצה במאגר)</label>
-          <input id="subject" type="text" list="subjects" placeholder="למשל: נפרולוגיה"><datalist id="subjects"></datalist></div>
+        <div class="field"><label for="subject">נושא (הקורס במאגר)</label>
+          <select id="subject"></select>
+          <input id="subjectNew" class="hidden" type="text" placeholder="שם הקורס החדש" style="margin-top:8px"></div>
         <div class="field"><label for="name">שם המבחן כפי שיופיע על הכפתור</label>
           <input id="name" type="text" placeholder="למשל: נפרולוגיה - מבחן תרגול"></div>
         <div class="field"><label for="type">סוג</label>
@@ -133,6 +134,41 @@ async function api(path, body){
 
 const NO_SERVER = 'הדף הזה פתוח כקובץ מהמחשב, בלי שרת, ולכן הניהול לא יכול לעבוד. פתחו את הכתובת של האתר ב-Vercel, או הריצו מקומית: node scripts/dev-server.js';
 
+let catalogItems = [];
+
+// Only the courses of the chosen year+semester, waiting ones first.
+function fillSubjects(){
+  const sel = $('#subject'), prev = sel.value;
+  const year = $('#year').value, sem = +$('#sem').value;
+  const here = catalogItems.filter(i => i.year === year && i.sem === sem);
+  const all = [...new Set(here.map(i => i.subject))];
+  const waiting = all.filter(s => here.filter(i => i.subject === s).every(i => i.status === 'empty'));
+  const filled = all.filter(s => !waiting.includes(s));
+  const opt = s => `<option value="${esc(s)}">${esc(s)}</option>`;
+  let html = '';
+  if (!all.length) html += '<option value="" disabled selected>אין עדיין קורסים לשנה ולסמסטר האלה</option>';
+  if (waiting.length) html += `<optgroup label="ממתינים למבחן">${waiting.map(opt).join('')}</optgroup>`;
+  if (filled.length) html += `<optgroup label="כבר יש בהם מבחן">${filled.map(opt).join('')}</optgroup>`;
+  html += '<option value="__new__">+ נושא חדש…</option>';
+  sel.innerHTML = html;
+  if (prev && [...sel.options].some(o => o.value === prev)) sel.value = prev;
+  syncNewSubject();
+}
+
+function syncNewSubject(){
+  const isNew = $('#subject').value === '__new__';
+  $('#subjectNew').classList.toggle('hidden', !isNew);
+  if (isNew) $('#subjectNew').focus();
+}
+
+function currentSubject(){
+  return ($('#subject').value === '__new__' ? $('#subjectNew').value : $('#subject').value).trim();
+}
+
+$('#year').addEventListener('change', fillSubjects);
+$('#sem').addEventListener('change', fillSubjects);
+$('#subject').addEventListener('change', syncNewSubject);
+
 async function loadCatalog(){
   const tb = $('#tbl tbody');
   let j;
@@ -141,10 +177,11 @@ async function loadCatalog(){
     j = await r.json();
   } catch (e) {
     tb.innerHTML = '<tr><td colspan="5">' + (location.protocol === 'file:' ? NO_SERVER : 'לא הצלחתי לטעון את הקטלוג מהשרת.') + '</td></tr>';
+    fillSubjects(); // leave a usable field rather than an empty dropdown
     return;
   }
-  const subjects = [...new Set(j.items.map(i => i.subject))];
-  $('#subjects').innerHTML = subjects.map(s => `<option value="${esc(s)}">`).join('');
+  catalogItems = j.items;
+  fillSubjects();
   $('#blobNote').textContent = j.hasBlob ? '' : 'שימו לב: אין Blob store מחובר לפרויקט, לכן העלאות לא יעבדו עדיין. חברו Storage → Blob בהגדרות הפרויקט ב-Vercel.';
   tb.innerHTML = j.items.map(i => {
     const st = i.status === 'empty' ? 'בקרוב' : i.status === 'pending' ? 'בבדיקה' : 'זמין';
@@ -187,9 +224,10 @@ $('#drop').addEventListener('dragover', e => { e.preventDefault(); });
 $('#drop').addEventListener('drop', e => { e.preventDefault(); takeFile(e.dataTransfer.files[0]); });
 
 $('#send').addEventListener('click', async () => {
-  const body = { year: $('#year').value, sem: +$('#sem').value, subject: $('#subject').value.trim(), name: $('#name').value.trim(),
+  const body = { year: $('#year').value, sem: +$('#sem').value, subject: currentSubject(), name: $('#name').value.trim(),
                  type: $('#type').value, status: $('#status').value, html: fileText, restyle: $('#restyle').checked };
-  if (!body.subject || !body.name) return show($('#upMsg'), 'err', 'חסר נושא או שם');
+  if (!body.subject) return show($('#upMsg'), 'err', 'צריך לבחור נושא מהרשימה');
+  if (!body.name) return show($('#upMsg'), 'err', 'צריך למלא שם למבחן');
   $('#send').disabled = true; show($('#upMsg'), 'ok', 'מעלה…');
   const r = await api('/api/upload', body);
   $('#send').disabled = false;
