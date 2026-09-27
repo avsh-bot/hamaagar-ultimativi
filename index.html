@@ -126,6 +126,8 @@ footer a{color:#fff;text-decoration-color:var(--orange);text-underline-offset:3p
   .chooser{position:static}
   .search{width:100%;order:3}
   .band .wrap{padding-top:28px;padding-bottom:24px}
+  /* the long Hebrew words in the heading cannot break, so scale the type to the screen */
+  .band h1{font-size:clamp(32px,8.5vw,64px);max-width:100%}
   .band p{font-size:17px}
   .ecg{height:40px}
   .chooser .hint{display:none}
