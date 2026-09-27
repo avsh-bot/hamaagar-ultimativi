@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>נוירואנטומיה — מבחן תרגול 🧠</title>
+<style>
+  @font-face {
+    font-family: 'Frank Ruhl Libre Fallback';
+    src: local('Frank Ruhl Libre');
+  }
+  :root{
+    --purple-900:#2e1065;
+    --purple-800:#3f1d78;
+    --purple-700:#4c1d95;
+    --purple-600:#6d28d9;
+    --purple-500:#7c3aed;
+    --purple-400:#9333ea;
+    --purple-300:#c084fc;
+    --purple-100:#f3e8ff;
+    --yellow-600:#d97706;
+    --yellow-500:#f59e0b;
+    --yellow-400:#fbbf24;
+    --yellow-300:#fcd34d;
+    --yellow-100:#fef9c3;
+    --green-600:#16a34a;
+    --green-100:#dcfce7;
+    --red-600:#dc2626;
+    --red-100:#fee2e2;
+    --ink:#241748;
+    --card-bg:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Heebo','Segoe UI',Arial,sans-serif;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(251,191,36,0.35), transparent 45%),
+      radial-gradient(circle at 90% 85%, rgba(192,132,252,0.35), transparent 45%),
+      linear-gradient(135deg, var(--purple-900) 0%, var(--purple-700) 45%, var(--purple-500) 100%);
+    background-attachment:fixed;
+    min-height:100vh;
+    color:var(--ink);
+    direction:rtl;
+    padding:24px 12px 60px;
+  }
+  h1,h2,h3,.heading-font{
+    font-family:'Frank Ruhl Libre','Frank Ruhl Libre Fallback',Georgia,'Times New Roman',serif;
+  }
+  .wrap{
+    max-width:820px;
+    margin:0 auto;
+  }
+  .topbar{
+    text-align:center;
+    color:#fff;
+    margin-bottom:22px;
+  }
+  .topbar h1{
+    font-size:2.1em;
+    margin:0 0 6px;
+    text-shadow:0 2px 10px rgba(0,0,0,0.35);
+    letter-spacing:0.5px;
+  }
+  .topbar .sub{
+    font-size:1em;
+    opacity:0.9;
+    font-weight:300;
+  }
+  .card{
+    background:var(--card-bg);
+    border-radius:22px;
+    box-shadow:0 20px 50px rgba(46,16,101,0.35);
+    padding:34px 30px;
+    position:relative;
+    overflow:hidden;
+    border:2px solid var(--yellow-400);
+  }
+  .card:before{
+    content:"";
+    position:absolute;
+    inset:0;
+    height:8px;
+    background:linear-gradient(90deg,var(--yellow-400),var(--purple-500),var(--yellow-400));
+  }
+  /* ===== Start Screen ===== */
+  .start-emoji{font-size:4em;text-align:center;margin-bottom:6px;}
+  .start-title{text-align:center;font-size:1.6em;color:var(--purple-700);margin:0 0 4px;}
+  .start-desc{text-align:center;color:#555;margin-bottom:26px;font-size:0.98em;line-height:1.6;}
+  .option-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:22px;}
+  .len-btn{
+    background:var(--purple-100);
+    border:2px solid var(--purple-300);
+    color:var(--purple-700);
+    padding:14px 22px;
+    border-radius:14px;
+    font-family:'Heebo',sans-serif;
+    font-size:1em;
+    font-weight:600;
+    cursor:pointer;
+    transition:all .15s ease;
+    min-width:120px;
+  }
+  .len-btn:hover{background:var(--purple-300);color:#fff;transform:translateY(-2px);}
+  .len-btn.selected{
+    background:linear-gradient(135deg,var(--purple-600),var(--purple-400));
+    color:#fff;
+    border-color:var(--yellow-400);
+    box-shadow:0 6px 16px rgba(124,58,237,0.4);
+  }
+  .start-btn{
+    display:block;
+    width:100%;
+    background:linear-gradient(135deg,var(--yellow-500),var(--yellow-600));
+    color:#3a1d00;
+    border:none;
+    padding:18px;
+    border-radius:16px;
+    font-size:1.25em;
+    font-weight:800;
+    font-family:'Frank Ruhl Libre',serif;
+    cursor:pointer;
+    box-shadow:0 10px 24px rgba(217,119,6,0.4);
+    transition:transform .15s ease;
+  }
+  .start-btn:hover{transform:translateY(-2px) scale(1.01);}
+  .meta-row{display:flex;justify-content:center;gap:26px;color:#777;font-size:0.9em;margin-top:18px;flex-wrap:wrap;}
+  .meta-row span{display:flex;align-items:center;gap:6px;}
+
+  /* ===== Quiz Screen ===== */
+  .progress-outer{
+    background:rgba(255,255,255,0.35);
+    border-radius:20px;
+    height:14px;
+    overflow:hidden;
+    margin-bottom:16px;
+    border:1px solid rgba(255,255,255,0.5);
+  }
+  .progress-inner{
+    height:100%;
+    background:linear-gradient(90deg,var(--yellow-400),var(--yellow-500));
+    border-radius:20px;
+    transition:width .3s ease;
+  }
+  .stat-row{
+    display:flex;
+    justify-content:space-between;
+    color:#fff;
+    font-size:0.95em;
+    margin-bottom:14px;
+    font-weight:600;
+  }
+  .stat-row .score-chip{
+    background:rgba(255,255,255,0.18);
+    padding:4px 14px;
+    border-radius:20px;
+    border:1px solid rgba(255,255,255,0.4);
+  }
+  .q-tag{
+    display:inline-block;
+    background:var(--yellow-100);
+    color:var(--yellow-600);
+    font-weight:700;
+    font-size:0.8em;
+    padding:4px 12px;
+    border-radius:20px;
+    margin-bottom:14px;
+  }
+  .q-tag.multi{background:var(--purple-100);color:var(--purple-700);}
+  .q-text{
+    font-size:1.28em;
+    line-height:1.55;
+    color:var(--ink);
+    margin-bottom:22px;
+    font-weight:600;
+  }
+  .options{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;}
+  .opt{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:#faf7ff;
+    border:2px solid #e9defc;
+    border-radius:14px;
+    padding:15px 18px;
+    cursor:pointer;
+    font-size:1.03em;
+    transition:all .12s ease;
+    line-height:1.5;
+  }
+  .opt:hover{border-color:var(--purple-400);background:#f3e8ff;}
+  .opt .bullet{
+    flex:0 0 26px;
+    height:26px;
+    border-radius:8px;
+    border:2px solid var(--purple-300);
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.8em;color:var(--purple-500);font-weight:700;
+    background:#fff;
+  }
+  .opt.radio .bullet{border-radius:50%;}
+  .opt.selected{border-color:var(--purple-500);background:#ecdcff;}
+  .opt.selected .bullet{background:var(--purple-500);color:#fff;}
+  .opt.correct{border-color:var(--green-600);background:var(--green-100);}
+  .opt.correct .bullet{background:var(--green-600);color:#fff;}
+  .opt.incorrect{border-color:var(--red-600);background:var(--red-100);}
+  .opt.incorrect .bullet{background:var(--red-600);color:#fff;}
+  .opt.disabled{cursor:default;}
+  .opt.disabled:hover{background:inherit;}
+
+  .action-row{display:flex;gap:12px;justify-content:flex-end;}
+  .btn{
+    padding:13px 26px;
+    border-radius:12px;
+    border:none;
+    font-family:'Heebo',sans-serif;
+    font-size:1em;
+    font-weight:700;
+    cursor:pointer;
+    transition:transform .12s ease;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn:disabled{opacity:0.45;cursor:not-allowed;transform:none;}
+  .btn-primary{
+    background:linear-gradient(135deg,var(--purple-600),var(--purple-400));
+    color:#fff;
+    box-shadow:0 6px 16px rgba(124,58,237,0.35);
+  }
+  .btn-yellow{
+    background:linear-gradient(135deg,var(--yellow-500),var(--yellow-600));
+    color:#3a1d00;
+    box-shadow:0 6px 16px rgba(217,119,6,0.35);
+  }
+  .feedback-box{
+    margin-top:2px;
+    margin-bottom:18px;
+    padding:14px 18px;
+    border-radius:14px;
+    font-size:1em;
+    display:none;
+    align-items:center;
+    gap:10px;
+    font-weight:700;
+  }
+  .feedback-box.show{display:flex;}
+  .feedback-box.correct{background:var(--green-100);color:#166534;border:2px solid var(--green-600);}
+  .feedback-box.incorrect{background:var(--red-100);color:#991b1b;border:2px solid var(--red-600);}
+
+  /* ===== Result Screen ===== */
+  .result-emoji{font-size:4.5em;text-align:center;}
+  .result-score{
+    text-align:center;
+    font-size:2.6em;
+    font-weight:800;
+    color:var(--purple-700);
+    margin:6px 0 2px;
+    font-family:'Frank Ruhl Libre',serif;
+  }
+  .result-sub{text-align:center;color:#666;margin-bottom:20px;}
+  .bar-wrap{background:#eee;border-radius:12px;overflow:hidden;height:22px;margin-bottom:26px;}
+  .bar-fill{height:100%;background:linear-gradient(90deg,var(--yellow-500),var(--purple-500));display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.8em;font-weight:700;}
+  .review-item{
+    border:2px solid #eee;
+    border-radius:14px;
+    padding:14px 16px;
+    margin-bottom:10px;
+    font-size:0.95em;
+  }
+  .review-item.wrong{border-color:var(--red-600);background:#fff6f6;}
+  .review-item.right{border-color:var(--green-600);background:#f6fff8;}
+  .review-item b{display:block;margin-bottom:6px;}
+  .review-answer{font-size:0.9em;color:#444;margin-top:4px;}
+  .footer-note{
+    text-align:center;color:rgba(255,255,255,0.75);font-size:0.85em;margin-top:26px;
+  }
+  .hidden{display:none !important;}
+  ::selection{background:var(--yellow-300);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <h1>🧠 נוירואנטומיה — מבחן תרגול ⚡</h1>
+    <div class="sub">שקופיות דר' יאיר צדקה &middot; שאלות אמריקאיות עם משוב מיידי</div>
+  </div>
+
+  <div class="card" id="startScreen">
+    <div class="start-emoji">🧠🦴👁️</div>
+    <div class="start-title">מוכנים לתרגל נוירואנטומיה?</div>
+    <div class="start-desc">בחרו כמה שאלות תרצו בסבב הנוכחי. הסדר, השאלות והמיקום של התשובה הנכונה מתערבבים בכל הרצה מחדש.</div>
+    <div class="option-grid" id="lenGrid"></div>
+    <button class="start-btn" id="startBtn">🚀 בואו נתחיל!</button>
+    <div class="meta-row">
+      <span id="totalQCount">📚 -- שאלות בבנק</span>
+      <span>🎯 משוב מיידי</span>
+      <span>🔀 שאלות מעורבבות</span>
+    </div>
+  </div>
+
+  <div class="card hidden" id="quizScreen">
+    <div class="stat-row">
+      <span id="qCounter">שאלה 1 מתוך 20</span>
+      <span class="score-chip" id="scoreChip">🏆 0</span>
+    </div>
+    <div class="progress-outer"><div class="progress-inner" id="progressBar" style="width:0%"></div></div>
+    <div id="qTag" class="q-tag">בחרו תשובה אחת</div>
+    <div class="q-text" id="qText"></div>
+    <div class="options" id="optionsWrap"></div>
+    <div class="feedback-box" id="feedbackBox"></div>
+    <div class="action-row">
+      <button class="btn btn-yellow hidden" id="checkBtn">✅ בדוק תשובה</button>
+      <button class="btn btn-primary hidden" id="nextBtn">הבא ⬅️</button>
+    </div>
+  </div>
+
+  <div class="card hidden" id="resultScreen">
+    <div class="result-emoji" id="resultEmoji">🎉</div>
+    <div class="result-score" id="resultScore">0%</div>
+    <div class="result-sub" id="resultSub"></div>
+    <div class="bar-wrap"><div class="bar-fill" id="resultBar" style="width:0%">0%</div></div>
+    <div style="display:flex;gap:12px;margin-bottom:24px;">
+      <button class="btn btn-primary" style="flex:1" id="restartBtn">🔁 סבב חדש</button>
+      <button class="btn btn-yellow" style="flex:1" id="reviewBtn">📋 סקירת טעויות</button>
+    </div>
+    <div id="reviewList"></div>
+  </div>
+
+  <div class="footer-note">נבנה עבור אביב &middot; מבחן תרגול פנימי — לא מהווה מקור רפואי רשמי 🧬</div>
+</div>
+
+<script>
+const ALL_QUESTIONS = [{"q": "מהי הסיבה האבולוציונית המרכזית לקיומו של המוח, לפי השיעור?", "options": ["איפשור הסתגלות של האורגניזם לסביבה משתנה", "ייצור חום גוף", "עיכול מזון", "ייצור תאי דם"], "correct": 0, "type": "single"}, {"q": "מערכת העצבים מתחלקת בעיקרון לשני מרכיבים עיקריים - אילו?", "options": ["מערכת עצבים מרכזית ומערכת עצבים פריפרית", "מוח וחוט שדרה בלבד", "מערכת סומטית ומערכת שרירית", "קורטקס ותלמוס"], "correct": 0, "type": "single"}, {"q": "אילו מבנים כלולים במערכת העצבים המרכזית (CNS)?", "options": ["מוח וחוט שדרה", "עצבים היקפיים בלבד", "שרירי השלד", "גנגליונים אוטונומיים בלבד"], "correct": 0, "type": "single"}, {"q": "סיבים אפרנטים (Afferent) מעבירים מידע:", "options": ["מהחושים אל מערכת העצבים המרכזית", "ממערכת העצבים המרכזית לשרירים", "בין שתי המיספרות", "מהלב אל הריאות"], "correct": 0, "type": "single"}, {"q": "סיבים אפרנטים (Efferent) מעבירים מידע:", "options": ["ממערכת העצבים המרכזית לשרירי השלד או לאיברים", "מהעור אל חוט השדרה בלבד", "מהעין אל התלמוס בלבד", "מהאוזן הפנימית בלבד"], "correct": 0, "type": "single"}, {"q": "המערכת האפרנטית (היוצאת) של מערכת העצבים הפריפרית מתחלקת ל:", "options": ["מערכת סומטית ומערכת אוטונומית", "מערכת סימפתטית ומערכת מוטורית", "מוח וחוט שדרה", "קורטקס וגרעינים"], "correct": 0, "type": "single"}, {"q": "המערכת האוטונומית מתחלקת הלאה לשתי מערכות - אילו?", "options": ["סימפתטית ופרה-סימפתטית", "סומטית ומוטורית", "אפרנטית ואפרנטית", "קרניאלית וספינלית"], "correct": 0, "type": "single"}, {"q": "המערכת הסימפתטית אחראית בעיקר על:", "options": ["תגובות אוטומטיות של הגוף בזמן דחק (fight or flight)", "פעילות אוטומטית בזמן מנוחה", "תנועת שרירי השלד", "עיבוד מידע חזותי"], "correct": 0, "type": "single"}, {"q": "המערכת הפרה-סימפתטית אחראית בעיקר על:", "options": ["פעילות אוטומטית של הגוף בזמן רגיעה (rest and digest)", "תגובת fight or flight", "תנועת שרירי השלד", "שמיעה"], "correct": 0, "type": "single"}, {"q": "איזה מהמבנים הבאים שייך למערכת העצבים הפריפרית ולא למרכזית?", "options": ["עצבים היקפיים", "המוח הגדול", "המוח הקטן", "חוט השדרה"], "correct": 0, "type": "single"}, {"q": "מהם שלושת המרכיבים העיקריים המרכיבים את המוח (ברמה הכללית)?", "options": ["מוח גדול, מוח קטן וגזע המוח", "תלמוס, היפותלמוס והיפוקמפוס", "קורטקס, גזע ועצבים קרניאליים", "חדרים, קרומים ונוזל"], "correct": 0, "type": "single"}, {"q": "גזע המוח (Brain Stem) מורכב משלושה חלקים - אילו?", "options": ["Midbrain, Pons, Medulla Oblongata", "Thalamus, Hypothalamus, Pons", "Cerebrum, Cerebellum, Medulla", "Cortex, Nuclei, Ventricles"], "correct": 0, "type": "single"}, {"q": "המוח הגדול (Cerebrum) מחולק ל:", "options": ["שתי המיספרות", "שלושה אונות בלבד", "ארבע חדרים", "שני גזעים"], "correct": 0, "type": "single"}, {"q": "מהו התפקיד המרכזי המיוחס למוח הקטן (Cerebellum)?", "options": ["תכנון ותיאום של תנועות מוטוריות", "עיבוד ראייה", "ייצור נוזל השדרה", "שליטה על קצב הלב בלבד"], "correct": 0, "type": "single"}, {"q": "חוט השדרה מכיל מסלולים עולים ויורדים - מה תפקידם?", "options": ["הזרמת מידע אל המוח וממנו", "ייצור נוזל מוחי שדרתי בלבד", "עיכול", "ראייה היקפית"], "correct": 0, "type": "single"}, {"q": "מהו החומר האפור (Gray Matter) בחוט השדרה?", "options": ["מצבורי תאי עצב שאינם עטופים במיאלין, במרכז חוט השדרה", "סיבים עטופים מיאלין בהיקף חוט השדרה", "נוזל השדרה", "רקמת חיבור בין חוליות"], "correct": 0, "type": "single"}, {"q": "איזה משפטים נכונים לגבי החלוקה הפריפרית של מערכת העצבים? (בחר את כל הנכונים)", "options": ["המערכת הסומטית אחראית על תנועת שרירי השלד", "המערכת האוטונומית מעצבבת שרירים חלקים ולב ובלוטות", "המערכת הפריפרית כוללת את המוח והחוט השדרה", "סיבים אפרנטים מעבירים מידע מהחושים אל המערכת המרכזית"], "correct": [0, 1, 3], "type": "multi"}, {"q": "מהו ה-Glia (תאי גליה)?", "options": ["שם כולל לתאים תומכים המצויים ב-CNS בלבד", "נוירונים מוטוריים", "סוג של קולטן סינפטי", "רקמת חיבור בעצבים היקפיים"], "correct": 0, "type": "single"}, {"q": "אילו מהתפקידים הבאים משויכים לתאי הגליה?", "options": ["אספקת מזון, תפקיד מקביל למקרופאגים, ובידוד", "העברת אות חשמלי מהיר בין נוירונים בלבד", "ייצור נוזל השדרה בלבד", "כיווץ שרירים"], "correct": 0, "type": "single"}, {"q": "אילו הם שלושת סוגי תאי הגליה העיקריים שנלמדו?", "options": ["Microglial Cells, Oligodendrocyte, Astrocyte", "Purkinje, Granule, Golgi", "Schwann, Neuron, Axon", "Dendrite, Soma, Synapse"], "correct": 0, "type": "single"}, {"q": "מהו הדנדריט בנוירון?", "options": ["האתר העיקרי לקליטת אותות מתאי עצב סמוכים", "האזור המשדר אותות אל תאים אחרים", "מעטפת השומן סביב האקסון", "גוף התא"], "correct": 0, "type": "single"}, {"q": "מהו האקסון היילוק (Axon Hillock)?", "options": ["אזור החיבור בין גוף התא לאקסון, שם מתקבלת ההחלטה אם להעביר אות חשמלי", "השם של תא הגליה התומך", "המקום שבו נוצר נוזל מוחי", "אזור בו נוצרות וסיקולות בלבד"], "correct": 0, "type": "single"}, {"q": "Nodes of Ranvier הם:", "options": ["מקטעים לא ממוילנים לאורך האקסון", "אזור הסינפסה", "חלק מגוף התא", "קולטנים בממברנה הפוסט-סינפטית"], "correct": 0, "type": "single"}, {"q": "העברת המידע בתוך הנוירון (מהדנדריטים לאקסון טרמינל) היא:", "options": ["חשמלית", "כימית בלבד", "הורמונלית", "מכנית"], "correct": 0, "type": "single"}, {"q": "העברת המידע בין נוירון לנוירון (בסינפסה) היא:", "options": ["כימית", "חשמלית בלבד", "מגנטית", "תרמית"], "correct": 0, "type": "single"}, {"q": "מהי סינפסה?", "options": ["אזור המפגש בין תא עצב לתא המטרה שבו מתרחשת העברה כימית של אותות", "גוף התא של הנוירון", "מעטפת המיאלין", "אזור בגזע המוח בלבד"], "correct": 0, "type": "single"}, {"q": "תא המטרה בסינפסה יכול להיות:", "options": ["תא עצב אחר, סיב שריר או בלוטה", "רק תא עצב אחר", "רק כלי דם", "רק תא גליה"], "correct": 0, "type": "single"}, {"q": "התא המשדר בסינפסה מכונה:", "options": ["פרה-סינפטי", "פוסט-סינפטי", "אינטר-סינפטי", "טרנס-סינפטי"], "correct": 0, "type": "single"}, {"q": "התא הקולט בסינפסה מכונה:", "options": ["פוסט-סינפטי", "פרה-סינפטי", "אקסונלי", "דנדריטי בלבד"], "correct": 0, "type": "single"}, {"q": "מה מכילות הוסיקולות (שלפוחיות) באזור הפרה-סינפטי?", "options": ["נוירו-טרנסמיטר", "נוזל מוחי שדרתי", "דם", "מיאלין"], "correct": 0, "type": "single"}, {"q": "סדר את שלבי שחרור הנוירוטרנסמיטר בסינפסה: פוטנציאל פעולה, פתיחת תעלות סידן, קשירת סידן לוסיקולות, שפיכת התוכן למרווח הסינפטי - מה קורה ראשון?", "options": ["הגעת פוטנציאל הפעולה לאקסון הטרמינל", "שפיכת הנוירוטרנסמיטר למרווח הסינפטי", "קשירת הסידן לוסיקולות", "פתיחת תעלות הסידן"], "correct": 0, "type": "single"}, {"q": "כניסת סידן (Ca2+) לאקסון הטרמינל גורמת ל:", "options": ["תנועת הוסיקולות לממברנה הפרה-סינפטית ושחרור נוירוטרנסמיטר", "סגירת תעלות נתרן", "עצירת פוטנציאל הפעולה", "יצירת מיאלין חדש"], "correct": 0, "type": "single"}, {"q": "אפשר לדמות את הקשר בין נוירוטרנסמיטר לרצפטור ל:", "options": ["מפתח ומנעול", "מגנט ומתכת", "חוט וחשמל", "מים וצינור"], "correct": 0, "type": "single"}, {"q": "סינפסה אקסיטטורית יוצרת:", "options": ["EPSP - Excitatory Post Synaptic Potential", "IPSP - Inhibitory Post Synaptic Potential", "פוטנציאל פעולה שלילי בלבד", "עיכוב מוחלט של התא"], "correct": 0, "type": "single"}, {"q": "דוגמה לנוירוטרנסמיטר אקסיטטורי שהוזכרה בשיעור:", "options": ["גלוטמט", "גאבא (GABA)", "מלטונין", "היסטמין"], "correct": 0, "type": "single"}, {"q": "סינפסה אינהיביטורית יוצרת:", "options": ["IPSP - Inhibitory Post Synaptic Potential", "EPSP - Excitatory Post Synaptic Potential", "פוטנציאל פעולה מוגבר", "שחרור מוגבר של סידן"], "correct": 0, "type": "single"}, {"q": "דוגמה לנוירוטרנסמיטר אינהיביטורי שהוזכרה בשיעור:", "options": ["גאבא (GABA)", "גלוטמט", "דופמין בלבד", "סרוטונין בלבד"], "correct": 0, "type": "single"}, {"q": "אוסף של גופי תאי עצב במערכת העצבים המרכזית מכונה:", "options": ["Nuclei", "Ganglia", "Fascicles", "Sulci"], "correct": 0, "type": "single"}, {"q": "אוסף של גופי תאי עצב מחוץ למערכת העצבים המרכזית (בפריפריה) מכונה:", "options": ["Ganglia", "Nuclei", "Cortex", "Tracts"], "correct": 0, "type": "single"}, {"q": "אילו מהמשפטים הבאים על הנוירון נכונים? (בחר את כל הנכונים)", "options": ["הדנדריטים קולטים מידע מנוירונים סמוכים", "האקסון מוליך אות חשמלי אל האקסון טרמינל", "הסינפסה היא חלק מגוף התא", "Nodes of Ranvier הם מקטעים חשופים לאורך האקסון המסייעים להולכה מהירה"], "correct": [0, 1, 3], "type": "multi"}, {"q": "אילו מבין הבאים הם סוגי תאי גליה? (בחר את כל הנכונים)", "options": ["Astrocyte", "Oligodendrocyte", "Microglial Cells", "Purkinje Cell"], "correct": [0, 1, 2], "type": "multi"}, {"q": "שתי ההמיספרות של המוח מחוברות בבסיסן באמצעות:", "options": ["Corpus Callosum", "Thalamus", "Internal Capsule", "Fornix"], "correct": 0, "type": "single"}, {"q": "מהו תפקידו של ה-Corpus Callosum?", "options": ["העברת מידע מצד אחד של המוח לצד השני", "ייצור נוזל מוחי", "עיבוד ראייה", "שליטה בלב"], "correct": 0, "type": "single"}, {"q": "\"ההרים\" בקורטקס (הבליטות) מכונים:", "options": ["Gyrus", "Sulcus", "Fissure בלבד", "Nuclei"], "correct": 0, "type": "single"}, {"q": "\"העמקים\" בקורטקס (החריצים) מכונים:", "options": ["Sulcus", "Gyrus", "Ventricle", "Cistern"], "correct": 0, "type": "single"}, {"q": "החריץ בין שתי ההמיספרות מכונה:", "options": ["Interhemispheric sulcus", "Central sulcus", "Lateral sulcus of Sylvius", "Calcarine sulcus"], "correct": 0, "type": "single"}, {"q": "השכבה החיצונית של המוח, המכילה בעיקר גופי תאים, מכונה:", "options": ["Cortex - Gray Matter", "White Matter", "Nuclei", "Dura"], "correct": 0, "type": "single"}, {"q": "החלק הפנימי הלבן של המוח, המכיל סיבי עצב מצופים מיאלין, מכונה:", "options": ["White Matter", "Gray Matter (Cortex)", "Meninges", "Arachnoid"], "correct": 0, "type": "single"}, {"q": "איים אפורים בתוך הפרנכימה של החומר הלבן מכונים:", "options": ["Nuclei", "Sulci", "Gyri", "Ventricles"], "correct": 0, "type": "single"}, {"q": "שני הסולקוסים (חריצים) המרכזיים המשמשים לאוריינטציה בחלוקת המוח לאונות הם:", "options": ["Central sulcus ו-Lateral sulcus of Sylvius", "Calcarine sulcus ו-Parieto-occipital sulcus", "Hippocampal sulcus ו-Collateral sulcus", "Cingulate sulcus ו-Marginal sulcus"], "correct": 0, "type": "single"}, {"q": "כמה אונות עיקריות מוזכרות בחלוקת המוח בשיעור?", "options": ["שש: פרונטלית, פריאטלית, טמפורלית, אוקסיפיטלית, אינסולה ולימבית", "ארבע בלבד", "שלוש בלבד", "שמונה"], "correct": 0, "type": "single"}, {"q": "האינסולה (Insula) היא:", "options": ["אונה חמישית הטמונה מתחת ללובוס הטמפורלי", "חלק מגזע המוח", "עצב קרניאלי", "חדר מוחי"], "correct": 0, "type": "single"}, {"q": "האונה הלימבית כוללת בין היתר את:", "options": ["Cingulate gyrus", "Precentral gyrus", "Heschl's gyrus", "Angular gyrus"], "correct": 0, "type": "single"}, {"q": "הקורטקס המוטורי הראשי (Primary Motor Cortex) ממוקם ב:", "options": ["Precentral gyrus באונה הפרונטלית", "Postcentral gyrus באונה הפריאטלית", "האונה האוקסיפיטלית", "האונה הטמפורלית"], "correct": 0, "type": "single"}, {"q": "Precentral gyrus תחום בין:", "options": ["Precentral sulcus ל-Central sulcus", "Postcentral sulcus ל-Central sulcus", "Lateral sulcus ל-Parieto-occipital sulcus", "Cingulate sulcus ל-Calcarine sulcus"], "correct": 0, "type": "single"}, {"q": "איזה אזורים נוספים כלולים באונה הפרונטלית מלבד הקורטקס המוטורי הראשי?", "options": ["Supplementary motor area, Premotor cortex, Frontal eye field", "Postcentral gyrus, Angular gyrus", "Heschl's gyrus, Wernicke's area", "Calcarine sulcus, Cuneus"], "correct": 0, "type": "single"}, {"q": "פגיעה באזור ה-pars opercularis/triangularis (אזור ברוקה) באונה הפרונטלית הדומיננטית עלולה לגרום ל:", "options": ["אפזיה מוטורית (אפזיית ברוקה)", "עיוורון", "אובדן שמיעה", "אטקסיה"], "correct": 0, "type": "single"}, {"q": "אילו תופעות קליניות עלולות לנבוע מפגיעה באונה הפרונטלית? (בחר את כל הנכונות)", "options": ["שיתוק מוטורי", "הפרעה בתנועות עיניים", "אפזיה", "שינויים בהתנהגות"], "correct": [0, 1, 2, 3], "type": "multi"}, {"q": "הקורטקס הסומטוסנסורי הראשי ממוקם ב:", "options": ["Postcentral gyrus באונה הפריאטלית", "Precentral gyrus באונה הפרונטלית", "Heschl's gyrus", "Cuneus"], "correct": 0, "type": "single"}, {"q": "מהו תסמונת Gerstmann's syndrome ובאיזו פגיעה היא נגרמת?", "options": ["פגיעה באונה הפריאטלית הדומיננטית", "פגיעה באונה הפריאטלית הלא-דומיננטית", "פגיעה בצרבלום", "פגיעה בגזע המוח"], "correct": 0, "type": "single"}, {"q": "אילו מהתסמינים הבאים שייכים לתסמונת Gerstmann? (בחר את כל הנכונים)", "options": ["קושי בחישוב (אקלקוליה)", "בלבול ימין-שמאל", "אגנוזיה של אצבעות", "אגרפיה"], "correct": [0, 1, 2, 3], "type": "multi"}, {"q": "Neglect (הזנחה) נגרם מפגיעה ב:", "options": ["האונה הפריאטלית הלא-דומיננטית", "האונה הפריאטלית הדומיננטית", "האונה האוקסיפיטלית", "המוח הקטן"], "correct": 0, "type": "single"}, {"q": "גירוסי אשל (Heschl's gyri) נמצאים ב:", "options": ["האונה הטמפורלית ומעורבים בשמיעה", "האונה הפריאטלית ומעורבים בתחושה", "האונה הפרונטלית ומעורבים בתנועה", "האונה האוקסיפיטלית ומעורבים בראייה"], "correct": 0, "type": "single"}, {"q": "אפזיה מוטורית (אפזיית ברוקה) קשורה לפגיעה ב:", "options": ["Inferior frontal gyrus", "Superior temporal gyrus", "Inferior parietal lobule", "Angular gyrus"], "correct": 0, "type": "single"}, {"q": "אפזיה סנסורית (אפזיית ורניקה) קשורה לפגיעה ב:", "options": ["Inferior parietal lobule ו-Superior temporal gyrus", "Inferior frontal gyrus בלבד", "Precentral gyrus", "Cuneus"], "correct": 0, "type": "single"}, {"q": "הקורטקס הראייתי הראשי (Primary Visual Cortex) ממוקם ב:", "options": ["האונה האוקסיפיטלית", "האונה הפריאטלית", "האונה הטמפורלית", "האינסולה"], "correct": 0, "type": "single"}, {"q": "Preoccipital notch ו-Parieto-occipital sulcus משמשים לתיחום:", "options": ["האונה האוקסיפיטלית", "האונה הפרונטלית", "האינסולה", "האונה הלימבית"], "correct": 0, "type": "single"}, {"q": "באיזה חתך מוחי ניתן לראות בבירור את ה-Cingulate gyrus וה-Corpus Callosum יחד?", "options": ["חתך מדיאני-סגיטלי (Midsagittal)", "חתך קורונלי", "חתך אקסיאלי", "חתך היקפי"], "correct": 0, "type": "single"}, {"q": "ה-Corpus Callosum מחולק בין היתר לחלק הנקרא Splenium - היכן הוא ממוקם?", "options": ["בחלק האחורי (posterior) של הקורפוס קלוסום", "בחלק הקדמי בלבד", "בתלמוס", "בגזע המוח"], "correct": 0, "type": "single"}, {"q": "ה-Fornix הוא מבנה סיבים המחבר בין:", "options": ["ההיפוקמפוס להיפותלמוס (בין השאר)", "העין לתלמוס", "האונה הפריאטלית לאוקסיפיטלית", "המוח הקטן לגזע המוח"], "correct": 0, "type": "single"}, {"q": "ה-Anterior commissure הוא:", "options": ["צרור סיבים המחבר בין ההמיספרות בחלק הקדמי", "עצב קרניאלי", "חלק מהחדר הרביעי", "שריר בגלגל העין"], "correct": 0, "type": "single"}, {"q": "ה-Optic chiasm ממוקם:", "options": ["מתחת להיפותלמוס, קדמית לאינפונדיבולום", "בתוך הצרבלום", "בחדר הרביעי", "בחוט השדרה"], "correct": 0, "type": "single"}, {"q": "ה-Pineal body (בלוטת האצטרובל) ממוקם:", "options": ["בחלק האחורי של הדיאנצפלון, סמוך ל-Habenular commissure", "בחלק הקדמי של האונה הפרונטלית", "בצרבלום", "בעצב האופטי"], "correct": 0, "type": "single"}, {"q": "ה-Mammillary body שייך ל:", "options": ["ההיפותלמוס", "התלמוס", "הצרבלום", "האונה האוקסיפיטלית"], "correct": 0, "type": "single"}, {"q": "ה-Superior/Inferior colliculus (הגבשושיות הארבע) ממוקמים ב:", "options": ["Tectum של המידברין", "Pons", "Medulla", "Cerebellum"], "correct": 0, "type": "single"}, {"q": "ה-Cerebral aqueduct (aqueduct of Sylvius) מחבר בין:", "options": ["החדר השלישי לחדר הרביעי", "החדר הרביעי לתעלה המרכזית", "החדרים הצדדיים לחדר השלישי", "החדר הרביעי לחלל הסאב-ארכנואידלי בלבד"], "correct": 0, "type": "single"}, {"q": "ה-Cuneus וה-Lingula הם אונות/גירי המוח הממוקמים ב:", "options": ["האונה האוקסיפיטלית, משני צידי ה-Calcarine sulcus", "האונה הפרונטלית", "הצרבלום", "האונה הטמפורלית"], "correct": 0, "type": "single"}, {"q": "ה-Precuneus ממוקם:", "options": ["בחלק האחורי של האונה הפריאטלית, בחתך המדיאני", "באונה הטמפורלית", "בגזע המוח", "בצרבלום"], "correct": 0, "type": "single"}, {"q": "במבט תחתון (inferior view) של המוח, איזה מבנה נראה בין שני האונות הטמפורליות?", "options": ["הדיאנצפלון וגזע המוח", "האונה האוקסיפיטלית בלבד", "הקורפוס קלוסום", "החדר הרביעי בלבד"], "correct": 0, "type": "single"}, {"q": "ה-Preoccipital notch נראה במבט:", "options": ["תחתון ומדיאני של המוח, בגבול האונה הטמפורלית/אוקסיפיטלית", "רק במבט קדמי", "רק בחתך קורונלי", "בצרבלום בלבד"], "correct": 0, "type": "single"}, {"q": "ה-Uncus הוא חלק מ:", "options": ["Parahippocampal gyrus", "Corpus callosum", "Thalamus", "Cerebellum"], "correct": 0, "type": "single"}, {"q": "שלושת קרומי המוח (Meninges) מבפנים החוצה הם:", "options": ["Pia, Arachnoid, Dura", "Dura, Arachnoid, Pia", "Arachnoid, Dura, Pia", "Pia, Dura, Arachnoid"], "correct": 0, "type": "single"}, {"q": "ה-Pia מכונה גם \"אמא רכה\" מכיוון ש:", "options": ["היא צמודה למוח באופן אינטימי, ממש דבוקה ל-gyri ול-sulci", "היא השכבה הקשה ביותר", "היא מכילה את רוב כלי הדם הגדולים", "היא יוצרת את הגולגולת"], "correct": 0, "type": "single"}, {"q": "ה-Arachnoid (\"קורי עכביש\") מתוארת בשיעור כ:", "options": ["רקמה פיברוטית יותר ופחות שקופה מה-Pia, כמו \"שקית ירקות\"", "השכבה הצמודה ביותר למוח", "שכבת עצם", "רקמת שריר"], "correct": 0, "type": "single"}, {"q": "ה-Dura מתוארת כרקמה:", "options": ["פיברוטית, קשה ופחות שקופה - \"רב פעמי\"", "רכה ושקופה כמו נילון", "נוזלית", "מלאה בתאי גליה בלבד"], "correct": 0, "type": "single"}, {"q": "קפלי ה-Dura הידועים הם:", "options": ["Falx cerebri ו-Tentorium cerebelli", "Falx cerebelli ו-Tentorium cerebri בלבד", "Pia mater folds", "Arachnoid granulations בלבד"], "correct": 0, "type": "single"}, {"q": "הסינוסים הוורידיים של המוח נמצאים בתוך:", "options": ["קפלי ה-Dura", "ה-Pia", "החלל התת-ארכנואידלי", "התלמוס"], "correct": 0, "type": "single"}, {"q": "החלל שבין ה-Dura ל-Arachnoid מכונה:", "options": ["Subdural space", "Subarachnoid space", "Epidural space", "Extradural space בלבד"], "correct": 0, "type": "single"}, {"q": "החלל שמתחת ל-Arachnoid, המכיל את נוזל השדרה וכלי הדם הגדולים, מכונה:", "options": ["Subarachnoid space", "Subdural space", "Epidural space", "Peridural space"], "correct": 0, "type": "single"}, {"q": "Epidural hemorrhage קשור בדרך כלל לפגיעה ב:", "options": ["Middle meningeal artery", "Bridging veins", "Circle of Willis", "Vertebral artery"], "correct": 0, "type": "single"}, {"q": "Subdural Hematoma נגרם בדרך כלל מפגיעה ב:", "options": ["Bridging veins", "Middle meningeal artery", "Internal carotid artery", "Basilar artery"], "correct": 0, "type": "single"}, {"q": "בהדמיית CT, כיצד נראה Subdural Hematoma בהשוואה ל-Epidural?", "options": ["בצורת \"סהר\" (crescent), בניגוד לצורת \"עדשה\" של האפידורלי", "בצורת עדשה, בדיוק כמו האפידורלי", "עגול ומרכזי", "לא נראה כלל ב-CT"], "correct": 0, "type": "single"}, {"q": "Subarachnoid Hemorrhage ספונטני נגרם לרוב עקב:", "options": ["מפרצת (aneurysm) בעורקי המוח", "פגיעה בעצם הגולגולת", "זיהום ויראלי", "גידול בבלוטת יותרת המוח"], "correct": 0, "type": "single"}, {"q": "התסמין הקלאסי של Subarachnoid Hemorrhage הוא:", "options": ["כאב ראש חד ביותר (\"הכי חזק שהיה לי אי פעם\") עם התדרדרות מהירה", "כאב גב כרוני", "חום גבוה בלבד", "כאבי בטן"], "correct": 0, "type": "single"}, {"q": "בהדמיית CT, דימום סאב-ארכנואידלי נוטה:", "options": ["לעקוב אחרי הגירוסים והסולקוסים של המוח", "להופיע כעדשה חדה", "להיראות רק בחדר הרביעי", "להיעלם תוך שעה"], "correct": 0, "type": "single"}, {"q": "הרדמה אפידורלית (למשל בלידה) מוזרקת אל:", "options": ["Epidural space, המלא בשומן וכלי דם", "Subarachnoid space", "החדר הרביעי", "תוך ורידית בלבד"], "correct": 0, "type": "single"}, {"q": "ניקור מותני (LP) נעשה בדרך כלל בגובה:", "options": ["L3-L4, מתחת לסיום חוט השדרה", "C1-C2", "T1-T2", "S4-S5"], "correct": 0, "type": "single"}, {"q": "חוט השדרה עצמו מסתיים בגובה חוליה:", "options": ["L1-L2", "L4-L5", "S1", "T12 בלבד"], "correct": 0, "type": "single"}, {"q": "ה-Cauda equina (\"זנב הסוס\") הוא:", "options": ["צרור שורשי עצבים הממשיכים מתחת לסיום חוט השדרה", "חלק מהצרבלום", "עצב קרניאלי", "כלי דם בגזע המוח"], "correct": 0, "type": "single"}, {"q": "הציסטרנה (המרווח) המאפשרת ניקור מותני בטוח נמצאת בין:", "options": ["סיום ה-Pia בגובה L1 לסיום ה-Arachnoid בגובה S2-S3", "ה-Dura ל-Arachnoid בגובה צווארי", "שני החדרים הצדדיים", "המוח הקטן לגזע המוח"], "correct": 0, "type": "single"}, {"q": "אילו משלושת סוגי הדימום התוך-גולגולתיים הבאים נכונים? (בחר את כל הנכונים)", "options": ["Epidural hemorrhage - בין הגולגולת לדורה", "Subdural hematoma - בין הדורה לארכנואיד", "Subarachnoid hemorrhage - מתחת לארכנואיד", "כולם קורים בתוך רקמת המוח עצמה"], "correct": [0, 1, 2], "type": "multi"}, {"q": "הגולגולת מחולקת לשלוש גומות (fossae) - אילו?", "options": ["Anterior, Middle, Posterior fossa", "Superior, Inferior, Lateral fossa", "Frontal, Parietal, Occipital fossa", "Medial, Distal, Proximal fossa"], "correct": 0, "type": "single"}, {"q": "Foramen Magnum הוא הפתח דרכו עובר:", "options": ["חוט השדרה מהגומה האחורית", "העצב האופטי", "עורק התרדמה הפנימי", "הוריד הג'וגולרי בלבד"], "correct": 0, "type": "single"}, {"q": "כמה חדרים (ventricles) יש במוח בסה\"כ?", "options": ["ארבעה: שני חדרים צדדיים, חדר שלישי וחדר רביעי", "שניים בלבד", "שלושה בלבד", "חמישה"], "correct": 0, "type": "single"}, {"q": "החדרים הצדדיים (Lateral ventricles) מחולקים לחלקים - אילו?", "options": ["Body, Anterior horn, Posterior horn, Inferior (temporal) horn", "Roof, Floor, Walls בלבד", "Superior horn, Lateral horn בלבד", "Frontal horn ו-Parietal horn בלבד"], "correct": 0, "type": "single"}, {"q": "החדרים הצדדיים מתקשרים עם החדר השלישי דרך:", "options": ["Foramen of Monro (Interventricular foramen)", "Aqueduct of Sylvius", "Foramen of Magendie", "Foramina of Luschka"], "correct": 0, "type": "single"}, {"q": "החדר השלישי מתקשר עם החדר הרביעי דרך:", "options": ["Aqueduct of Sylvius (Cerebral aqueduct)", "Foramen of Monro", "Foramen of Magendie", "Central canal בלבד"], "correct": 0, "type": "single"}, {"q": "החדר הרביעי מנקז את נוזל השדרה אל החלל הסאב-ארכנואידלי דרך:", "options": ["Foramina of Luschka ו-Foramen of Magendie", "Foramen of Monro בלבד", "Aqueduct of Sylvius בלבד", "Central canal בלבד"], "correct": 0, "type": "single"}, {"q": "נוזל השדרה (CSF) מיוצר בעיקר על ידי:", "options": ["Choroid plexus שבחדרים", "ה-Dura mater", "ה-Arachnoid granulations", "התלמוס"], "correct": 0, "type": "single"}, {"q": "מהם התפקידים העיקריים של נוזל השדרה? (בחר את כל הנכונים)", "options": ["ציפה (Buoyancy)", "בולם זעזועים (Protection)", "רגולציה כימית (Chemical stability)", "ייצור נוירוטרנסמיטרים"], "correct": [0, 1, 2], "type": "multi"}, {"q": "נוזל השדרה מסייע במניעת הרניאציה מוחית באמצעות:", "options": ["ירידה בנפח הנוזל כתגובה לעלייה בנפח רקמות אחרות בגולגולת", "הגברת לחץ הדם", "ייצור מיאלין", "שחרור הורמונים"], "correct": 0, "type": "single"}, {"q": "נוזל השדרה נספג בחזרה למחזור הדם דרך:", "options": ["Arachnoid granulations אל הסינוס הסגיטלי העליון", "החדר הרביעי", "כלי דם בפיה מייטר בלבד", "הצרבלום"], "correct": 0, "type": "single"}, {"q": "כמות התאים התקינה בנוזל השדרה היא:", "options": ["עד 3 תאים", "עד 300 תאים", "מעל 1000 תאים", "אין תאים כלל בשום מצב"], "correct": 0, "type": "single"}, {"q": "הידרוצפלוס נגרם לרוב עקב:", "options": ["הפרעה בזרימה או בספיגה של נוזל השדרה", "עודף מיאלין", "חוסר בנוירוטרנסמיטרים", "זיהום בעור בלבד"], "correct": 0, "type": "single"}, {"q": "הרניאציה (Herniation) מוחית עלולה להיגרם עקב:", "options": ["אפקט מסה ועלייה בלחץ התוך-גולגולתי (ICP)", "ירידה בלחץ הדם ההיקפי", "עודף נוזל שדרה בלבד ללא סיבה נוספת", "חסר בסידן"], "correct": 0, "type": "single"}, {"q": "Midline shift בהדמיה מעיד על:", "options": ["אפקט מסה חד-צדדי הדוחק את קו האמצע של המוח", "זרימה תקינה של CSF", "פעילות תקינה של הצרבלום", "עלייה בלחץ דם עורקי בלבד"], "correct": 0, "type": "single"}, {"q": "Uncal transtentorial herniation מתרחשת כאשר:", "options": ["ה-Uncus נדחק דרך פתח ה-Tentorium cerebelli", "החדר הרביעי מתרחב", "יש דימום אפידורלי בלבד", "יש ירידה בלחץ התוך גולגולתי"], "correct": 0, "type": "single"}, {"q": "Tonsillar herniation (הרניאציה של שקדי המוח הקטן) מתרחשת דרך:", "options": ["Foramen Magnum", "Foramen of Monro", "Aqueduct of Sylvius", "Tentorium cerebelli"], "correct": 0, "type": "single"}, {"q": "Subfalcine herniation מתרחשת מתחת ל:", "options": ["Falx cerebri", "Tentorium cerebelli", "Foramen Magnum", "Foramen of Monro"], "correct": 0, "type": "single"}, {"q": "החלל התת-ארכנואידלי (Subarachnoid space) עוטף:", "options": ["את המוח וחוט השדרה כולו", "רק את החדרים", "רק את הצרבלום", "רק את הגולגולת"], "correct": 0, "type": "single"}, {"q": "Circle of Willis הוא מבנה של:", "options": ["חיבור עורקי במעגל בבסיס המוח", "חדרי המוח", "מעגל ורידי בלבד", "קרומי המוח"], "correct": 0, "type": "single"}, {"q": "מהי הפונקציה הכימית (chemical stability) של נוזל השדרה?", "options": ["רגולציה של פסולת מטבולית", "ייצור הורמונים", "יצירת דם חדש", "עיכול חלבונים"], "correct": 0, "type": "single"}, {"q": "איזה משטח מרפד את חלל החדרים ומייצר בין השאר את נוזל השדרה?", "options": ["Ependyma (אפיתל)", "Dura mater", "שריר חלק", "עצם"], "correct": 0, "type": "single"}, {"q": "שני זוגות העורקים העיקריים המספקים דם למוח הם:", "options": ["Internal carotid artery ו-Vertebral artery", "External carotid artery ו-Subclavian artery", "Aorta ו-Pulmonary artery", "Basilar artery ו-Femoral artery"], "correct": 0, "type": "single"}, {"q": "עורק התרדמה הפנימי (Internal Carotid Artery) שייך למחזור הדם:", "options": ["הקדמי (Anterior circulation)", "האחורי (Posterior circulation)", "הוורידי בלבד", "הלימפטי"], "correct": 0, "type": "single"}, {"q": "עורק החוליה (Vertebral Artery) שייך למחזור הדם:", "options": ["האחורי (Posterior circulation)", "הקדמי (Anterior circulation)", "המרכזי", "הפריפרי"], "correct": 0, "type": "single"}, {"q": "עורק החוליה נובע מ:", "options": ["Subclavian artery", "Aorta ישירות", "External carotid artery", "Basilar artery"], "correct": 0, "type": "single"}, {"q": "ראשי התיבות OPAAM מתארים את ענפי:", "options": ["ה-Internal Carotid Artery", "ה-Vertebral Artery", "ה-Basilar Artery", "ה-Circle of Willis כולו"], "correct": 0, "type": "single"}, {"q": "ה-Ophthalmic artery הוא ענף של:", "options": ["Internal carotid artery", "External carotid artery", "Vertebral artery", "Posterior cerebral artery"], "correct": 0, "type": "single"}, {"q": "Bifurcation (התפצלות) של עורק התרדמה הפנימי יוצר את:", "options": ["Anterior Cerebral Artery (ACA) ו-Middle Cerebral Artery (MCA)", "Posterior Cerebral Artery ו-Basilar Artery", "שני עורקי החוליה", "External ו-Internal carotid בלבד"], "correct": 0, "type": "single"}, {"q": "שני עורקי ה-ACA (Anterior Cerebral Artery) מחוברים ביניהם דרך:", "options": ["Anterior Communicating Artery (Acom)", "Posterior Communicating Artery (Pcom)", "Basilar artery", "Vertebral artery"], "correct": 0, "type": "single"}, {"q": "Recurrent Artery of Heubner היא ענף של:", "options": ["Anterior Cerebral Artery", "Middle Cerebral Artery", "Posterior Cerebral Artery", "Basilar Artery"], "correct": 0, "type": "single"}, {"q": "ה-MCA (Middle Cerebral Artery) יוצא ומתפזר בעיקר מעל:", "options": ["ה-Lateral sulcus, לרוחב הקונווקסיטה הלטרלית של ההמיספרה", "החדר הרביעי", "הצרבלום", "החוט השדרה"], "correct": 0, "type": "single"}, {"q": "קטע ה-M1 של ה-MCA מכונה:", "options": ["Lenticulo-striate segment", "Sylvian segment", "Cortical segment", "Communicating segment"], "correct": 0, "type": "single"}, {"q": "קטע ה-M2 של ה-MCA מכונה:", "options": ["Sylvian segment", "Lenticulo-striate segment", "Cortical segment", "Perforating segment"], "correct": 0, "type": "single"}, {"q": "ה-MCA מספקת דם בעיקר ל:", "options": ["פני השטח הלטרליים של האונות הפרונטלית, טמפורלית ופריאטלית", "כל האונה האוקסיפיטלית", "הצרבלום כולו", "חוט השדרה"], "correct": 0, "type": "single"}, {"q": "שני עורקי החוליה מתאחדים ליצירת:", "options": ["Basilar Artery, בגבול התחתון של הפונס", "Anterior Communicating Artery", "Internal Carotid Artery", "Posterior Communicating Artery"], "correct": 0, "type": "single"}, {"q": "Posterior Inferior Cerebellar Artery (PICA) מספק דם ל:", "options": ["חלקים במדולה, בתחתית הוורמיס והשקדים, וחלקית ה-choroid plexus של החדר הרביעי", "כל הצרבלום", "כל הפונס", "האונה הפרונטלית"], "correct": 0, "type": "single"}, {"q": "Anterior Inferior Cerebellar Artery (AICA) מספק דם ל:", "options": ["חלקים קאודליים בפונס והטגמנטום, וגם הפלוקולוס", "האונה האוקסיפיטלית", "התלמוס", "חוט השדרה"], "correct": 0, "type": "single"}, {"q": "Superior Cerebellar Artery עובר ומספק דם ל:", "options": ["פני השטח העליונים של הצרבלום וגרעיניו", "פני השטח התחתונים בלבד", "הקורטקס הראייתי", "עורק התרדמה הפנימי"], "correct": 0, "type": "single"}, {"q": "Labyrinthine Artery מספק דם ל:", "options": ["האוזן הפנימית", "העין", "האונה הטמפורלית", "הצרבלום כולו"], "correct": 0, "type": "single"}, {"q": "Posterior Cerebral Artery (PCA) נובע מ:", "options": ["Basilar Artery", "Internal Carotid Artery", "MCA", "ACA"], "correct": 0, "type": "single"}, {"q": "ענפי ה-PCA כוללים:", "options": ["Anterior/Posterior temporal, Medial occipital, Calcarine, Parieto-occipital", "Lenticulo-striate ו-Sylvian בלבד", "Frontopolar ו-Orbital בלבד", "Labyrinthine ו-AICA"], "correct": 0, "type": "single"}, {"q": "במקרה של אירוע מוחי (stroke) ב-Left MCA superior division, מהו התסמין הצפוי?", "options": ["חולשה בפנים ובזרוע ימין מסוג נוירון מוטורי עליון, ואפזיה לא-שוטפת (Broca)", "עיוורון מלא", "חולשה ברגל שמאל בלבד", "אובדן שמיעה"], "correct": 0, "type": "single"}, {"q": "במקרה של אירוע מוחי ב-Left MCA inferior division, מהו התסמין הצפוי?", "options": ["אפזיית ורניקה (שוטפת) ופגם בשדה הראייה הימני", "אפזיית ברוקה בלבד", "עיוורון מוחלט", "אטקסיה"], "correct": 0, "type": "single"}, {"q": "Right MCA inferior division stroke גורם בדרך כלל ל:", "options": ["הזנחה שמאלית עמוקה (profound left hemineglect)", "אפזיה שוטפת", "עיוורון דו-צדדי", "רעד במנוחה"], "correct": 0, "type": "single"}, {"q": "אירוע מוחי ב-Left ACA territory גורם בדרך כלל ל:", "options": ["חולשה ברגל ימין מסוג נוירון עליון וירידה תחושתית ברגל", "עיוורון מלא", "אפזיה סנסורית", "חירשות"], "correct": 0, "type": "single"}, {"q": "אירוע מוחי ב-PCA territory (חד-צדדי) גורם בדרך כלל ל:", "options": ["המיאנופיה הומונימית בצד הנגדי", "חולשה מוחלטת בפנים", "אובדן שמיעה", "אגרפיה בלבד"], "correct": 0, "type": "single"}, {"q": "אילו מבין העורקים הבאים שייכים ל-Anterior circulation? (בחר את כל הנכונים)", "options": ["Internal carotid artery", "Anterior cerebral artery", "Middle cerebral artery", "Vertebral artery"], "correct": [0, 1, 2], "type": "multi"}, {"q": "אילו מבין העורקים הבאים שייכים ל-Posterior circulation? (בחר את כל הנכונים)", "options": ["Vertebral artery", "Basilar artery", "Posterior cerebral artery", "Middle cerebral artery"], "correct": [0, 1, 2], "type": "multi"}, {"q": "Circle of Willis מחבר בין מחזור הדם הקדמי לאחורי בעזרת:", "options": ["Posterior Communicating Artery (Pcom)", "Anterior Communicating Artery בלבד", "Basilar Artery בלבד", "אין חיבור ביניהם"], "correct": 0, "type": "single"}, {"q": "Calloso-marginal artery ו-Pericallosal artery הם ענפים של:", "options": ["Anterior Cerebral Artery", "Middle Cerebral Artery", "Posterior Cerebral Artery", "Vertebral Artery"], "correct": 0, "type": "single"}, {"q": "מבחוץ פנימה, השכבות סביב חוט השדרה הן:", "options": ["Spinal column, Dura, Arachnoid, Pia, Spinal cord", "Pia, Arachnoid, Dura, Spinal column, Spinal cord", "Spinal cord, Pia, Dura, Arachnoid", "Arachnoid, Pia, Dura בלבד"], "correct": 0, "type": "single"}, {"q": "במערכת העצבים, באופן כללי, מסלולים מוטוריים נוטים להיות:", "options": ["יותר וונטרליים (קדמיים)", "יותר דורסליים (אחוריים)", "רק לטרליים", "רק מדיאליים"], "correct": 0, "type": "single"}, {"q": "במערכת העצבים, באופן כללי, מסלולים סנסוריים נוטים להיות:", "options": ["יותר דורסליים (אחוריים)", "יותר וונטרליים (קדמיים)", "רק במרכז חוט השדרה", "רק בגזע המוח"], "correct": 0, "type": "single"}, {"q": "עד לאיזו חוליה יוצאים עצבי הצוואר (Cervical) מעל החוליה המתאימה?", "options": ["עד C7 (העצב C8 יוצא מתחת לחוליה)", "עד C4 בלבד", "כל העצבים הצוואריים יוצאים מתחת לחוליה", "עד T1"], "correct": 0, "type": "single"}, {"q": "חוט השדרה מסתיים בגובה חוליה:", "options": ["L1-L2", "S1", "T12", "L4"], "correct": 0, "type": "single"}, {"q": "שני העיבויים (enlargements) של חוט השדרה הם:", "options": ["Cervical enlargement ו-Lumbosacral enlargement", "Thoracic enlargement ו-Sacral enlargement", "Cranial enlargement ו-Coccygeal enlargement", "אין עיבויים בחוט השדרה"], "correct": 0, "type": "single"}, {"q": "בחתך רוחב של חוט השדרה, החומר האפור (Gray matter) ממוקם:", "options": ["במרכז, בצורת H", "בהיקף החוץ", "רק בקרן הקדמית", "רק בקרן האחורית"], "correct": 0, "type": "single"}, {"q": "המסלול היורד (אפרנטי) העיקרי המוטורי בחוט השדרה הוא:", "options": ["Cortico-spinal tract (Pyramidal tract)", "Spino-thalamic tract", "Gracilis and Cuneatus tract", "Spino-cerebellar tract בלבד"], "correct": 0, "type": "single"}, {"q": "שני המסלולים העולים (אפרנטיים) העיקריים בחוט השדרה הם:", "options": ["Spino-thalamic ו-Gracilis/Cuneatus (posterior column)", "Cortico-spinal ו-Cortico-bulbar", "Reticulo-spinal ו-Vestibulo-spinal בלבד", "Olfactory tract ו-Optic tract"], "correct": 0, "type": "single"}, {"q": "המסלול הקורטיקוספינלי (פירמידלי) מתחיל בגוף התא ב:", "options": ["Primary motor cortex", "Thalamus", "Cerebellum", "Basal ganglia בלבד"], "correct": 0, "type": "single"}, {"q": "סדר המעבר של המסלול הקורטיקוספינלי ממקור ועד חוט השדרה הוא:", "options": ["Corona radiata, Internal capsule, Cerebral peduncle, Pons, Medulla (הצטלבות פירמידות)", "Medulla, Pons, Internal capsule, Corona radiata", "Thalamus, Basal ganglia, Cerebellum", "Spinal cord, Medulla, Pons, Cortex"], "correct": 0, "type": "single"}, {"q": "הצלבת (decussation) המסלול הקורטיקוספינלי מתרחשת ב:", "options": ["המדולה (Pyramid decussation)", "התלמוס", "הפונס", "המידברין"], "correct": 0, "type": "single"}, {"q": "לאחר ההצלבה, המסלול הקורטיקוספינלי ממשיך בחוט השדרה כ:", "options": ["Lateral corticospinal tract", "Anterior corticospinal tract בלבד ללא הצלבה", "Spino-thalamic tract", "Spino-cerebellar tract"], "correct": 0, "type": "single"}, {"q": "המסלול הקורטיקוספינלי מבצע סינפסה עם:", "options": ["תאי הקרן הקדמית (ventral horn cells)", "תאי הקרן האחורית בלבד", "התלמוס בלבד", "תאי גליה בלבד"], "correct": 0, "type": "single"}, {"q": "פגיעה בנוירון מוטורי עליון (UMN) לעומת נוירון מוטורי תחתון (LMN) - איזה מהמשפטים נכון?", "options": ["פגיעת UMN גורמת לספסטיות והיפר-רפלקסיה, בעוד פגיעת LMN גורמת לרפיון ואטרופיה", "שתיהן זהות קלינית", "פגיעת LMN גורמת תמיד לספסטיות", "פגיעת UMN אינה משפיעה על טונוס השריר"], "correct": 0, "type": "single"}, {"q": "מסלול ה-Spinothalamic נושא בעיקר מידע של:", "options": ["כאב וטמפרטורה", "פרופריוצפציה ומגע עדין", "מידע ראייתי", "מידע שמיעתי"], "correct": 0, "type": "single"}, {"q": "מסלול ה-Spinothalamic מבצע הצלבה:", "options": ["לפני העלייה בחוט השדרה, סמוך לכניסה", "רק במדולה", "רק בקורטקס", "אינו מצליב כלל"], "correct": 0, "type": "single"}, {"q": "סדר הסינפסות במסלול הספינותלמי הוא:", "options": ["סינפסה ראשונה לפני ההצלבה, שנייה בתלמוס, שלישית בקורטקס", "סינפסה יחידה בקורטקס בלבד", "שתי סינפסות בלבד, שתיהן בחוט השדרה", "ארבע סינפסות, כולן בגזע המוח"], "correct": 0, "type": "single"}, {"q": "מסלול ה-Gracilis and Cuneatus (עמודה אחורית) נושא בעיקר מידע של:", "options": ["פרופריוצפציה ומגע עדין (דיסקרימינטיבי)", "כאב וטמפרטורה", "ראייה", "טעם"], "correct": 0, "type": "single"}, {"q": "מסלול העמודה האחורית (Gracilis/Cuneatus) מצליב:", "options": ["בגובה המדולה (לאחר סינפסה ראשונה)", "מיד בכניסה לחוט השדרה", "אינו מצליב כלל", "בתלמוס בלבד"], "correct": 0, "type": "single"}, {"q": "Brown-Séquard Syndrome נגרם מ:", "options": ["חתך חצי-רוחבי (חד-צדדי) של חוט השדרה", "פגיעה דו-צדדית סימטרית", "פגיעה בגזע המוח בלבד", "פגיעה בצרבלום"], "correct": 0, "type": "single"}, {"q": "בתסמונת Brown-Séquard, מה קורה בצד הפגיעה עצמו?", "options": ["אובדן תחושת פרופריוצפציה ומגע עדין וחולשה מוטורית (UMN) מתחת לפגיעה", "אובדן כאב וטמפרטורה בלבד", "שיתוק מלא דו-צדדי", "עיוורון"], "correct": 0, "type": "single"}, {"q": "בתסמונת Brown-Séquard, מה קורה בצד הנגדי לפגיעה?", "options": ["אובדן תחושת כאב וטמפרטורה מתחת לרמת הפגיעה", "אובדן פרופריוצפציה", "שיתוק מוטורי מלא", "אין השפעה כלל"], "correct": 0, "type": "single"}, {"q": "\"רמת תחושה\" (Sensory level) קלינית משמשת לאבחון:", "options": ["גובה הפגיעה בחוט השדרה", "סוג הגידול במוח", "מיקום דימום תוך-גולגולתי", "פגיעה בעצב קרניאלי"], "correct": 0, "type": "single"}, {"q": "Anterior Cord Syndrome גורם ל:", "options": ["אובדן כאב, טמפרטורה ותפקוד מוטורי, עם שימור תחושת רטט ותנוחה", "אובדן כל התחושות ללא חריג", "שימור מלא של כל התפקודים", "פגיעה בשמיעה בלבד"], "correct": 0, "type": "single"}, {"q": "Posterior Cord Syndrome גורם בעיקר ל:", "options": ["אובדן תחושת רטט ותנוחה (עמודה אחורית)", "אובדן כאב וטמפרטורה בלבד", "שיתוק מוטורי מלא", "עיוורון"], "correct": 0, "type": "single"}, {"q": "אספקת הדם לחוט השדרה מגיעה בעיקר דרך:", "options": ["Anterior spinal artery ו-Posterior spinal arteries", "רק ה-Vertebral artery ישירות", "רק ה-Basilar artery", "רק ה-MCA"], "correct": 0, "type": "single"}, {"q": "אילו מבין המסלולים הבאים הם מסלולים עולים (סנסוריים) בחוט השדרה? (בחר את כל הנכונים)", "options": ["Spino-thalamic tract", "Gracilis and Cuneatus (posterior column)", "Cortico-spinal tract", "Lateral corticospinal tract"], "correct": [0, 1], "type": "multi"}, {"q": "ה-Lentiform nucleus מורכב מ:", "options": ["Putamen ו-Globus Pallidus", "Caudate ו-Thalamus", "Claustrum ו-Insula", "Substantia Nigra ו-Subthalamic Nucleus"], "correct": 0, "type": "single"}, {"q": "ה-Striatum (Neostriatum) מורכב מ:", "options": ["Caudate ו-Putamen", "Globus Pallidus ו-Substantia Nigra", "Thalamus ו-Subthalamic nucleus", "Claustrum ו-Insula"], "correct": 0, "type": "single"}, {"q": "ה-Internal Capsule מחולק ל:", "options": ["Anterior limb, Genu, Posterior limb", "Superior limb, Inferior limb בלבד", "Medial limb, Lateral limb בלבד", "אין לו חלוקה"], "correct": 0, "type": "single"}, {"q": "ה-Claustrum ממוקם:", "options": ["בין ה-External capsule ל-Extreme capsule", "בתוך התלמוס", "בגזע המוח", "בצרבלום"], "correct": 0, "type": "single"}, {"q": "ה-Substantia Nigra מחולקת לשני חלקים - אילו?", "options": ["Pars reticulata ו-Pars compacta", "Pars anterior ו-Pars posterior", "Pars medialis ו-Pars lateralis", "Pars superior ו-Pars inferior"], "correct": 0, "type": "single"}, {"q": "Pars compacta של ה-Substantia Nigra מאופיינת ב:", "options": ["תאים דופמינרגיים כהים (מלנין)", "תאים כולינרגיים", "תאים סרוטונרגיים", "תאי גליה בלבד"], "correct": 0, "type": "single"}, {"q": "Substantia Nigra Pars Reticulata דומה מבחינה תפקודית ל:", "options": ["Globus Pallidus Interna", "Globus Pallidus Externa", "Caudate Nucleus", "Putamen"], "correct": 0, "type": "single"}, {"q": "קלט (Input) עיקרי לסטריאטום (striatum) מגיע מ:", "options": ["הקורטקס (אקסיטטורי) ומה-Substantia Nigra Compacta", "התלמוס בלבד", "הצרבלום בלבד", "חוט השדרה"], "correct": 0, "type": "single"}, {"q": "הפלט (Output) העיקרי של גרעיני הבסיס יוצא דרך:", "options": ["Globus Pallidus Interna ו-Substantia Nigra Reticulata", "Caudate ו-Putamen", "Subthalamic Nucleus בלבד", "Claustrum"], "correct": 0, "type": "single"}, {"q": "הפלט של גרעיני הבסיס אל התלמוס הוא ברובו:", "options": ["מעכב (אינהיביטורי, \"-\")", "מעורר (אקסיטטורי, \"+\") בלבד", "ניטרלי לחלוטין", "אין קשר לתלמוס"], "correct": 0, "type": "single"}, {"q": "המסלול הישיר (Direct pathway) בגרעיני הבסיס גורם באפקט נטו ל:", "options": ["עירור (excitation) של הקורטקס דרך התלמוס", "עיכוב מוחלט של תנועה", "פגיעה בזיכרון", "שיתוק"], "correct": 0, "type": "single"}, {"q": "המסלול העקיף (Indirect pathway) בגרעיני הבסיס גורם באפקט נטו ל:", "options": ["עיכוב (inhibition)", "עירור נטו", "אין השפעה על התנועה", "השפעה רק על הראייה"], "correct": 0, "type": "single"}, {"q": "פרקינסוניזם (Parkinsonism) מסווג כתנועה:", "options": ["היפוקינטית (hypokinetic)", "היפרקינטית (hyperkinetic)", "נורמלית", "אטקסית בלבד"], "correct": 0, "type": "single"}, {"q": "כוריאה (Chorea) והמיבליזם (Hemiballismus) מסווגים כתנועה:", "options": ["היפרקינטית (hyperkinetic)", "היפוקינטית (hypokinetic)", "אטקסית", "תקינה"], "correct": 0, "type": "single"}, {"q": "פרקינסוניזם מאופיין בקומבינציה של:", "options": ["רעד במנוחה, ברדיקינזיה, נוקשות, ואי-יציבות יציבתית", "חולשה מוטורית מלאה בלבד", "עיוורון וכאב ראש", "אובדן שמיעה"], "correct": 0, "type": "single"}, {"q": "Athetosis מתאר תנועות:", "options": ["איטיות, מתמשכות, מפותלות בחלקי גוף דיסטליים (אצבעות וידיים)", "מהירות ופתאומיות בלבד", "תנועות עיניים בלבד", "תנועות נשימה"], "correct": 0, "type": "single"}, {"q": "Dystonia מאופיינת ב:", "options": ["תנוחות ו/או תנועות חוזרות ומתמשכות בעלות איכות מפתלת", "רעד קצבי בלבד", "אובדן טונוס שריר מוחלט", "אובדן זיכרון"], "correct": 0, "type": "single"}, {"q": "מחלת Huntington נגרמת מהרחבה (repeat expansion) בכרומוזום:", "options": ["4 (חזרות CAG)", "21", "X", "13"], "correct": 0, "type": "single"}, {"q": "במחלת Huntington, מספר חזרות CAG גבוה מ-40 מסווג כ:", "options": ["Full Penetrance - החולה יהיה חולה בוודאות", "Normal - לא יהיה חולה", "Intermediate - סיכון נמוך", "לא רלוונטי למחלה"], "correct": 0, "type": "single"}, {"q": "התסמינים הראשוניים במחלת Huntington כוללים לרוב:", "options": ["שינויי אישיות ואפקט, כוריאה, ירידה קוגניטיבית", "עיוורון פתאומי", "אובדן שמיעה מיידי", "שיתוק מלא מהתחלה"], "correct": 0, "type": "single"}, {"q": "שיעור ההתאבדויות במחלת Huntington מוערך ב:", "options": ["3-7%", "50%", "0%", "כמעט 100%"], "correct": 0, "type": "single"}, {"q": "PKAN (לשעבר Hallervorden-Spatz) הוא:", "options": ["מחלה ניוונית עצבית הקשורה בגרעיני הבסיס", "זיהום ויראלי חולף", "סוג של כאב ראש", "פגיעה בעצב קרניאלי בלבד"], "correct": 0, "type": "single"}, {"q": "אילו מהתופעות הבאות מסווגות כהיפרקינטיות? (בחר את כל הנכונות)", "options": ["כוריאה", "דיסטוניה", "טיקים", "פרקינסוניזם"], "correct": [0, 1, 2], "type": "multi"}, {"q": "Myoclonus מתאר:", "options": ["תנועות פתאומיות, קצרות, דמויות זעזוע", "תנועות איטיות ומתמשכות", "רעד קבוע בלבד", "שיתוק מוחלט"], "correct": 0, "type": "single"}, {"q": "Tremor מוגדר כ:", "options": ["תנודה קצבית סביב נקודה מרכזית", "תנועה חד-פעמית בלבד", "שיתוק שריר", "אובדן תחושה"], "correct": 0, "type": "single"}, {"q": "המוח הקטן (Cerebellum) ממוקם ב:", "options": ["הגומה האחורית (Posterior fossa), ויוצר את גג החדר הרביעי", "הגומה הקדמית", "האונה הפרונטלית", "מעל התלמוס"], "correct": 0, "type": "single"}, {"q": "החלוקה הפונקציונלית של המוח הקטן (במבט מלמעלה) כוללת:", "options": ["Vermis במרכז, Para-vermis (Intermediate) לצדדים, ו-Lateral hemispheres בקצוות", "רק חצי ימני וחצי שמאלי", "רק Vermis ו-Lateral hemispheres ללא אמצעי", "אין חלוקה פונקציונלית"], "correct": 0, "type": "single"}, {"q": "החלוקה האנטומית של המוח הקטן (מלמעלה למטה) כוללת:", "options": ["Anterior lobe, Primary fissure, Middle (Posterior) lobe, Flocculonodular lobe", "Superior lobe ו-Inferior lobe בלבד", "Left lobe ו-Right lobe בלבד", "רק Vermis"], "correct": 0, "type": "single"}, {"q": "פגיעה ב-Vermis וב-Flocculonodular lobe גורמת בעיקר ל:", "options": ["אטקסיה גזעית (Truncal ataxia) והפרעות שיווי משקל", "אובדן ראייה", "כאב ראש בלבד", "אובדן שמיעה"], "correct": 0, "type": "single"}, {"q": "פגיעה באזור ה-Para-vermis (Intermediate hemispheres) גורמת ל:", "options": ["אטקסיה של הגפיים (Appendicular ataxia) ודיסמטריה", "אובדן שמיעה", "אפזיה", "עיוורון"], "correct": 0, "type": "single"}, {"q": "פגיעה ב-Lateral hemispheres של הצרבלום קשורה בעיקר ל:", "options": ["תכנון תנועה (motor planning) לגפיים", "שמיעה", "ריח", "ראייה"], "correct": 0, "type": "single"}, {"q": "שלוש קבוצות סיבים חשובות המעבירות מידע אל ומהצרבלום הן:", "options": ["Superior, Middle, Inferior cerebellar peduncles", "Anterior, Posterior, Lateral peduncles", "Frontal, Parietal peduncles בלבד", "אין קשר בין הצרבלום למוח דרך פדנקלים"], "correct": 0, "type": "single"}, {"q": "ה-Superior Cerebellar Peduncle מוביל בעיקר מידע:", "options": ["היוצא מהצרבלום (efferent)", "הנכנס לצרבלום בלבד (afferent)", "רק מידע חושי מהעור", "רק מידע ראייתי"], "correct": 0, "type": "single"}, {"q": "ה-Middle ו-Inferior Cerebellar Peduncles מובילים בעיקר מידע:", "options": ["הנכנס אל הצרבלום (afferent)", "היוצא מהצרבלום בלבד", "מידע חזותי בלבד", "מידע ריחני"], "correct": 0, "type": "single"}, {"q": "שכבות הקורטקס של הצרבלום מלמעלה למטה הן:", "options": ["Molecular, Purkinje, Granular", "Granular, Purkinje, Molecular", "Purkinje, Molecular, Granular", "Molecular, Granular, Purkinje"], "correct": 0, "type": "single"}, {"q": "סיב הטיפוס (Climbing fiber) בקורטקס הצרבלרי מגיע עד ל:", "options": ["תא הפורקינייה (Purkinje)", "השכבה הגרנולרית בלבד", "ה-Molecular layer בלבד ולא מעבר", "הגרעינים העמוקים ישירות"], "correct": 0, "type": "single"}, {"q": "סיב המוסי (Mossy fiber) עוצר תחילה ב:", "options": ["תאי הגרנולה (Granule cells) בשכבה הגרנולרית", "תאי פורקינייה ישירות", "השכבה המולקולרית", "הגרעינים העמוקים"], "correct": 0, "type": "single"}, {"q": "תאי הגרנולה (Granule cells) הם מבחינת מספרם:", "options": ["הכמות הגדולה ביותר של תאים במוח כולו", "נדירים מאוד", "קיימים רק בקורטקס המוחי", "אינם קיימים בצרבלום"], "correct": 0, "type": "single"}, {"q": "כל המידע היוצא מקורטקס הצרבלום עובר דרך:", "options": ["תאי הפורקינייה (Purkinje cells)", "תאי הגרנולה בלבד", "תאי גולג'י בלבד", "סיבי טיפוס בלבד"], "correct": 0, "type": "single"}, {"q": "ארבעת הגרעינים העמוקים של הצרבלום הם (מהעזרה של החרוזה בשיעור):", "options": ["Dentate, Globose, Emboliform, Fastigial", "Caudate, Putamen, Pallidum, Thalamus", "Red nucleus, Substantia nigra, Subthalamic, Thalamus", "Solitary, Ambiguus, Cuneate, Gracile"], "correct": 0, "type": "single"}, {"q": "Climbing fiber מגיע לצרבלום ממקור:", "options": ["Inferior olivary nucleus", "Pontine nuclei", "Substantia nigra", "Thalamus"], "correct": 0, "type": "single"}, {"q": "Mossy fiber מגיע לצרבלום ממקור:", "options": ["Pontine nuclei ומקורות נוספים", "Inferior olivary nucleus בלבד", "Substantia nigra", "Vestibular nuclei בלבד"], "correct": 0, "type": "single"}, {"q": "מסלול הפלט של ה-Lateral cerebellar hemisphere עובר דרך:", "options": ["Dentate nucleus -> Superior cerebellar peduncle -> Ventral lateral nucleus of thalamus -> קורטקס מוטורי", "Fastigial nucleus -> Inferior cerebellar peduncle בלבד", "ישירות לחוט השדרה ללא סינפסות", "Vestibular nuclei בלבד"], "correct": 0, "type": "single"}, {"q": "מסלול הפלט של ה-Lateral hemisphere מתפקד בעיקר ב:", "options": ["תכנון תנועה (motor planning)", "שיווי משקל בלבד", "ראייה", "שמיעה"], "correct": 0, "type": "single"}, {"q": "מסלול הפלט מה-Intermediate (Para-vermis) hemisphere עובר דרך גרעיני:", "options": ["Emboliform ו-Globose", "Dentate בלבד", "Fastigial בלבד", "Vestibular nuclei"], "correct": 0, "type": "single"}, {"q": "מסלול הפלט מה-Intermediate hemisphere אחראי בעיקר על:", "options": ["קואורדינציה דיסטלית (distal limb coordination)", "שיווי משקל בלבד", "ראייה מרחבית", "שליטה בלב"], "correct": 0, "type": "single"}, {"q": "מסלול הפלט מה-Vermis וה-Flocculonodular lobe עובר דרך גרעין:", "options": ["Fastigial", "Dentate", "Emboliform", "Globose"], "correct": 0, "type": "single"}, {"q": "מסלול הפלט מה-Vermis משפיע בעיקר על:", "options": ["שיווי משקל ורפלקסים וסטיבולו-אוקולריים", "תכנון תנועה מורכב של האצבעות", "שמיעה", "ריח"], "correct": 0, "type": "single"}, {"q": "Truncal ataxia (אטקסיה גזעית) קשורה לפגיעה ב:", "options": ["Vermis ו-Flocculonodular lobe", "Lateral hemispheres בלבד", "Dentate nucleus בלבד", "Basal ganglia"], "correct": 0, "type": "single"}, {"q": "Appendicular ataxia (אטקסיה של הגפיים) ודיסמטריה קשורות לפגיעה ב:", "options": ["Para-vermis / Intermediate hemispheres", "Vermis בלבד", "Flocculonodular lobe בלבד", "Frontal lobe"], "correct": 0, "type": "single"}, {"q": "ה-Tonsils של הצרבלום מהווים סיכון קליני ל:", "options": ["הרניאציה דרך ה-Foramen Magnum", "שבץ מוחי בלבד", "כאב ראש מיגרנוטי", "פרקינסוניזם"], "correct": 0, "type": "single"}, {"q": "Dysmetria מתארת:", "options": ["חוסר דיוק בטווח ובכיוון של תנועה מכוונת מטרה", "אובדן טונוס שריר מוחלט", "רעד במנוחה בלבד", "כאב כרוני"], "correct": 0, "type": "single"}, {"q": "אילו מבין הגרעינים העמוקים הבאים שייכים לצרבלום? (בחר את כל הנכונים)", "options": ["Dentate", "Fastigial", "Globose", "Caudate"], "correct": [0, 1, 2], "type": "multi"}, {"q": "כמה עצבים קרניאליים יש בסה\"כ (בכל צד)?", "options": ["שנים עשר (I-XII)", "עשרה", "שמונה", "ארבעה עשר"], "correct": 0, "type": "single"}, {"q": "הסדר המספרי של העצבים הקרניאליים תואם:", "options": ["את מיקומם המרחבי מלפנים לאחור בגזע המוח", "סדר אלפביתי", "סדר הגילוי ההיסטורי", "גודל העצב"], "correct": 0, "type": "single"}, {"q": "איזה עצב קרניאלי הוא הוונטרלי (הקדמי) ביותר?", "options": ["עצב 1 - Olfactory", "עצב 12 - Hypoglossal", "עצב 6 - Abducens", "עצב 3 - Oculomotor"], "correct": 0, "type": "single"}, {"q": "איזה עצב קרניאלי נמצא בתחתית גזע המוח?", "options": ["עצב 12 - Hypoglossal", "עצב 1 - Olfactory", "עצב 2 - Optic", "עצב 3 - Oculomotor"], "correct": 0, "type": "single"}, {"q": "עצב קרניאלי מספר 1 (Olfactory) אחראי על:", "options": ["חוש הריח", "ראייה", "תנועת גלגל העין", "שמיעה"], "correct": 0, "type": "single"}, {"q": "סיבי העצב האולפקטורי (I) עוברים דרך:", "options": ["Cribriform plate של עצם האתמואיד", "Foramen Magnum", "Jugular foramen", "Internal auditory meatus"], "correct": 0, "type": "single"}, {"q": "עצב קרניאלי מספר 2 (Optic) אחראי על:", "options": ["ראייה", "ריח", "טעם", "תנועת עיניים"], "correct": 0, "type": "single"}, {"q": "עצב קרניאלי מספר 3 (Oculomotor) ממוקם ב:", "options": ["Midbrain", "Pons", "Medulla", "חוט השדרה"], "correct": 0, "type": "single"}, {"q": "עצב מספר 3 מעצבב את כל שרירי גלגל העין למעט שניים - אילו?", "options": ["Superior oblique (עצב 4) ו-Lateral rectus (עצב 6)", "Medial rectus ו-Inferior rectus", "Superior rectus ו-Inferior oblique", "כל השרירים מעוצבבים על ידי עצב 3"], "correct": 0, "type": "single"}, {"q": "עצב מספר 3 מעצבב גם את השריר המרים את העפעף - מהו שמו?", "options": ["Levator palpebrae", "Orbicularis oculi", "Superior oblique", "Ciliary muscle בלבד"], "correct": 0, "type": "single"}, {"q": "עצב מספר 3 נושא גם סיבים אוטונומיים פרה-סימפתטיים האחראים ל:", "options": ["כיווץ האישון (Pupil constriction)", "הרחבת האישון", "הזעה בפנים", "ייצור רוק"], "correct": 0, "type": "single"}, {"q": "המנמוניקה SOLAR מסייעת לזכור כי:", "options": ["עצב 4 מעצבב Superior Oblique ועצב 6 מעצבב Lateral Rectus - כל היתר עצב 3", "כל עצבי העין הם עצב 3", "עצב 6 מעצבב את כל השרירים", "SOLAR מתאר את מבנה הרשתית"], "correct": 0, "type": "single"}, {"q": "עצב קרניאלי מספר 4 (Trochlear) ממוקם ב:", "options": ["Midbrain", "Pons", "Medulla", "חוט השדרה הצווארי"], "correct": 0, "type": "single"}, {"q": "עצב מספר 4 מעצבב את שריר:", "options": ["Superior oblique", "Lateral rectus", "Medial rectus", "Levator palpebrae"], "correct": 0, "type": "single"}, {"q": "פגיעה בעצב מספר 4 גורמת לחוסר יכולת:", "options": ["להוריד מבט כשגלגל העין פונה לאף", "להרים את העפעף", "לכווץ את האישון", "לזוז הצידה"], "correct": 0, "type": "single"}, {"q": "עצב קרניאלי מספר 6 (Abducens) ממוקם ב:", "options": ["Pons", "Midbrain", "Medulla", "Cerebellum"], "correct": 0, "type": "single"}, {"q": "עצב מספר 6 מעצבב את שריר:", "options": ["Lateral rectus", "Medial rectus", "Superior oblique", "Inferior oblique"], "correct": 0, "type": "single"}, {"q": "איזה שריר מזיז את העין מדיאלית לכיוון האף?", "options": ["Medial rectus", "Lateral rectus", "Superior oblique", "Inferior rectus"], "correct": 0, "type": "single"}, {"q": "איזה שריר מזיז את העין הצידה (רחוק מהאף)?", "options": ["Lateral rectus", "Medial rectus", "Superior rectus", "Inferior oblique"], "correct": 0, "type": "single"}, {"q": "עצב קרניאלי מספר 5 (Trigeminal) כולל את המרכיבים:", "options": ["סנסורי (תחושה מהפנים) ומוטורי (שרירי לעיסה)", "רק סנסורי", "רק מוטורי", "רק אוטונומי"], "correct": 0, "type": "single"}, {"q": "שלושת הענפים הסנסוריים של עצב 5 הם:", "options": ["Ophthalmic, Maxillary, Mandibular", "Frontal, Parietal, Occipital", "Superior, Middle, Inferior", "Anterior, Middle, Posterior"], "correct": 0, "type": "single"}, {"q": "הענף Ophthalmic של עצב 5 מעצבב:", "options": ["הקרקפת, העיניים והאף", "הלסת התחתונה בלבד", "רק את השפה העליונה", "רק את הלשון"], "correct": 0, "type": "single"}, {"q": "הענף Mandibular של עצב 5 מעצבב גם:", "options": ["את אזור הלסת ועובר קדמית לאוזן", "רק את העין", "רק את האף", "רק את המצח"], "correct": 0, "type": "single"}, {"q": "עצב 5 מייצב באוזן התיכונה את העצם:", "options": ["Malleus (Malleolus)", "Incus", "Stapes", "Cochlea"], "correct": 0, "type": "single"}, {"q": "Trigeminal Neuralgia היא תוצאה קלינית של פגיעה בעצב:", "options": ["5 (Trigeminal)", "7 (Facial)", "8 (Vestibulocochlear)", "3 (Oculomotor)"], "correct": 0, "type": "single"}, {"q": "עצב קרניאלי מספר 7 (Facial) מעצבב, בין היתר:", "options": ["שרירי הפנים, בלוטות הרוק והדמע, וטעם מ-2/3 הקדמי של הלשון", "שרירי הלעיסה בלבד", "שמיעה בלבד", "תנועת גלגל העין"], "correct": 0, "type": "single"}, {"q": "עצב 7 עובר דרך תעלת השמע הפנימית יחד עם עצב:", "options": ["8 (Vestibulocochlear)", "5 (Trigeminal)", "9 (Glossopharyngeal)", "12 (Hypoglossal)"], "correct": 0, "type": "single"}, {"q": "הרפלקס הקורנאלי בודק תפקוד של עצבים:", "options": ["5 (סנסורי) ו-7 (מוטורי - עצימת עין)", "1 ו-2 בלבד", "9 ו-10 בלבד", "3 ו-4 בלבד"], "correct": 0, "type": "single"}, {"q": "עצב קרניאלי מספר 8 (Vestibulocochlear) קשור ל:", "options": ["שיווי משקל ושמיעה", "ריח וטעם", "תנועת עיניים", "לעיסה"], "correct": 0, "type": "single"}, {"q": "עצב קרניאלי מספר 9 (Glossopharyngeal) יוצא מהגולגולת דרך:", "options": ["Jugular foramen, יחד עם עצבים 10 ו-11", "Foramen Magnum", "Cribriform plate", "Internal auditory meatus"], "correct": 0, "type": "single"}, {"q": "עצב 9 נושא מידע מהברורצפטור (Carotid bulb) ומעביר אותו ל:", "options": ["Solitary nucleus בגזע המוח", "התלמוס ישירות", "הצרבלום", "החדר הרביעי"], "correct": 0, "type": "single"}, {"q": "בדיקת רפלקס ההקאה (Gag reflex) בודקת יחד את עצבים:", "options": ["9 ו-10", "5 ו-7", "3 ו-4", "11 ו-12"], "correct": 0, "type": "single"}, {"q": "עצב קרניאלי מספר 9 נותן טעם מ:", "options": ["1/3 האחורי של הלשון", "2/3 הקדמי של הלשון", "כל הלשון", "רק מהחיך"], "correct": 0, "type": "single"}, {"q": "עצב קרניאלי מספר 10 (Vagus) נדון בהרחבה בפרק:", "options": ["המערכת האוטונומית", "הצרבלום", "גרעיני הבסיס", "האונות המוחיות"], "correct": 0, "type": "single"}, {"q": "עצב קרניאלי מספר 11 (Accessory) מעצבב את השרירים:", "options": ["Sternocleidomastoid ו-Trapezius", "Masseter ו-Temporalis", "Orbicularis oculi", "Levator palpebrae"], "correct": 0, "type": "single"}, {"q": "פגיעה בעצב 11 תתבטא בקושי ב:", "options": ["הרמת היד מעל קו הכתף, וייתכן Winging scapula", "הרמת עפעף", "בליעה", "דיבור"], "correct": 0, "type": "single"}, {"q": "עצב קרניאלי מספר 12 (Hypoglossal) אחראי על:", "options": ["הנעה מוטורית של הלשון", "טעם מהלשון", "תחושה מהפנים", "בליעה בלבד"], "correct": 0, "type": "single"}, {"q": "בפגיעת נוירון מוטורי תחתון (LMN) בעצב 12, בעת הוצאת הלשון היא:", "options": ["\"מצביעה\" (סוטה) לכיוון הפגיעה עצמה", "סוטה לכיוון הנגדי", "נשארת במרכז", "אינה זזה כלל"], "correct": 0, "type": "single"}, {"q": "עצבים קרניאליים אשר נושאים סיבים פרה-סימפתטיים (אוטונומיים) הם:", "options": ["3, 7, 9, 10", "1, 2, 8", "4, 6, 11", "5, 12"], "correct": 0, "type": "single"}, {"q": "איזה עצב קרניאלי אינו מעביר מידע דרך התלמוס (בניגוד לכל שאר העצבים הסנסוריים)?", "options": ["1 - Olfactory", "2 - Optic", "8 - Vestibulocochlear", "5 - Trigeminal"], "correct": 0, "type": "single"}, {"q": "מיקום גרעיני עצבים 5,6,7,8 בגזע המוח הוא בעיקר:", "options": ["Pons", "Midbrain", "Medulla", "חוט השדרה"], "correct": 0, "type": "single"}, {"q": "מיקום גרעיני עצבים 9,10,11,12 בגזע המוח הוא בעיקר:", "options": ["Medulla", "Midbrain", "Pons", "Cerebellum"], "correct": 0, "type": "single"}, {"q": "מיקום גרעיני עצבים 3,4 בגזע המוח הוא:", "options": ["Midbrain", "Pons", "Medulla", "חוט השדרה"], "correct": 0, "type": "single"}, {"q": "אילו מהעצבים הקרניאליים הבאים כוללים מרכיב מוטורי לשרירי גלגל העין? (בחר את כל הנכונים)", "options": ["עצב 3 (Oculomotor)", "עצב 4 (Trochlear)", "עצב 6 (Abducens)", "עצב 2 (Optic)"], "correct": [0, 1, 2], "type": "multi"}, {"q": "אילו מהעצבים הקרניאליים הבאים יוצאים יחד דרך Jugular Foramen? (בחר את כל הנכונים)", "options": ["עצב 9", "עצב 10", "עצב 11", "עצב 12"], "correct": [0, 1, 2], "type": "multi"}, {"q": "השכבה החיצונית ביותר של גלגל העין, המשמשת כמעטפת, מכונה:", "options": ["Sclera (לובן העין)", "Cornea", "Iris", "Retina"], "correct": 0, "type": "single"}, {"q": "הקרנית (Cornea) תפקידה:", "options": ["לשבור ולאסוף את קרני האור הנכנסות לעין", "לשלוט על כמות האור החודר", "להמיר פוטונים לאנרגיה חשמלית", "לשנות את עובי העדשה"], "correct": 0, "type": "single"}, {"q": "הקשתית (Iris) מהווה מעין צמצם ה:", "options": ["שולט בכמות האור החודר לעין ומקנה לעין את צבעה", "משבר את קרני האור", "מכיל פוטורצפטורים", "מוליך אותות חשמליים לתלמוס"], "correct": 0, "type": "single"}, {"q": "האישון (Pupil) הוא:", "options": ["חור במרכז הקשתית המאפשר מעבר אור לרשתית", "שריר השולט בעדשה", "שכבה חיצונית של העין", "עצב הראייה"], "correct": 0, "type": "single"}, {"q": "העדשה (Lens) יכולה לשנות את עוביה בעזרת:", "options": ["Ciliary muscles (ליגמנטים סיליאריים)", "שריר ה-Iris בלבד", "שריר ה-Sclera", "עצב הטריגמינוס"], "correct": 0, "type": "single"}, {"q": "הרשתית (Retina) מכילה:", "options": ["פוטורצפטורים ההופכים פוטונים לאנרגיה חשמלית", "רק כלי דם", "שריר חלק בלבד", "בלוטת דמע"], "correct": 0, "type": "single"}, {"q": "אקסונים מהרשתית מתכנסים אל:", "options": ["Optic disc, ומשם ל-Optic nerve", "Cornea ישירות", "Iris", "Lens"], "correct": 0, "type": "single"}, {"q": "סדר מסלול הראייה (Visual pathway) הוא:", "options": ["Optic nerve, Optic chiasm, Optic tract, Lateral geniculate body, Optic radiation, Visual cortex", "Retina, Iris, Cornea, Optic nerve", "Optic chiasm, Optic nerve, Retina", "Visual cortex, Optic nerve, Retina"], "correct": 0, "type": "single"}, {"q": "ב-Optic chiasm מתרחשת:", "options": ["הצלבה חלקית של סיבים מהרשתית הנזאלית (האפית)", "הצלבה מלאה של כל הסיבים", "אין הצלבה כלל", "הצלבה של סיבי שמיעה"], "correct": 0, "type": "single"}, {"q": "ה-Lateral Geniculate Nucleus (LGN) הוא תחנת ממסר של מסלול הראייה הממוקמת ב:", "options": ["התלמוס", "המוח הקטן", "הפונס", "המדולה"], "correct": 0, "type": "single"}, {"q": "פגיעה בעצב הראייה (Optic nerve) לפני ה-Chiasm תגרום ל:", "options": ["עיוורון מלא בעין הנפגעת בלבד", "המיאנופיה ביטמפורלית דו-צדדית", "המיאנופיה הומונימית", "אין השפעה על הראייה"], "correct": 0, "type": "single"}, {"q": "פגיעה במרכז ה-Optic Chiasm (למשל בגידול היפופיזה) גורמת ל:", "options": ["המיאנופיה ביטמפורלית (Bitemporal hemianopia)", "עיוורון מלא בשתי העיניים", "המיאנופיה הומונימית", "אין שום פגם בשדה הראייה"], "correct": 0, "type": "single"}, {"q": "פגיעה ב-Optic tract (אחרי ה-chiasm) גורמת ל:", "options": ["המיאנופיה הומונימית (Homonymous hemianopia) בצד הנגדי", "עיוורון מלא", "המיאנופיה ביטמפורלית", "פגיעה בשמיעה בלבד"], "correct": 0, "type": "single"}, {"q": "פגיעה ב-Optic radiations או בקורטקס הראייתי (אוקסיפיטלי) גורמת ל:", "options": ["המיאנופיה הומונימית", "המיאנופיה ביטמפורלית", "עיוורון מלא ודאי", "אובדן שמיעה"], "correct": 0, "type": "single"}, {"q": "בהשוואה למערכת המוטורית הסומטית, המערכת האוטונומית פועלת באופן:", "options": ["אוטומטי (לא רצוני)", "רצוני ומבוקר לחלוטין", "זהה לחלוטין למערכת הסומטית", "רק בזמן שינה"], "correct": 0, "type": "single"}, {"q": "במערכת האוטונומית, בניגוד למערכת הסומטית, קיים בדרך כלל:", "options": ["גנגליון אוטונומי (סינפסה נוספת) בין חוט השדרה לאיבר המטרה", "מגע ישיר של הקרן הקדמית עם השריר", "רק נוירון אחד לכל המסלול", "אין צורך בנוירוטרנסמיטר"], "correct": 0, "type": "single"}, {"q": "במערכת הסומטית, נוירון מוטורי אחד מהקרן הקדמית מגיע:", "options": ["ישירות לשריר השלד ללא סינפסת ביניים", "דרך גנגליון אוטונומי", "רק דרך עצב קרניאלי", "רק דרך התלמוס"], "correct": 0, "type": "single"}, {"q": "היציאה הסימפתטית (Sympathetic outflow) מקורה בחוט השדרה בגובה:", "options": ["Thoraco-lumbar - T1 עד L2/L3", "Cranio-sacral בלבד", "רק צווארי", "רק סקרלי"], "correct": 0, "type": "single"}, {"q": "היציאה הפרה-סימפתטית (Parasympathetic outflow) מקורה ב:", "options": ["Cranio-sacral - עצבים קרניאליים ו-S2-S4", "Thoraco-lumbar בלבד", "רק לומברי", "רק בגזע המוח ללא מרכיב סקרלי"], "correct": 0, "type": "single"}, {"q": "הגנגליונים הסימפתטיים ממוקמים בדרך כלל:", "options": ["קרוב לעמוד השדרה (שרשרת סימפתטית, gaglia פרה-ורטברליים)", "בתוך איבר המטרה עצמו", "בתוך המוח", "אין להם גנגליון כלל"], "correct": 0, "type": "single"}, {"q": "הגנגליונים הפרה-סימפתטיים ממוקמים בדרך כלל:", "options": ["קרוב לאיבר המטרה או בתוכו", "צמוד לעמוד השדרה", "בתוך התלמוס", "בגזע המוח בלבד"], "correct": 0, "type": "single"}, {"q": "הנוירוטרנסמיטר הפרה-גנגליוני (לפני הגנגליון) בשתי המערכות (סימפתטית ופרה-סימפתטית) הוא:", "options": ["אצטילכולין (ACh)", "נוראדרנלין (NA) בשתיהן", "דופמין", "סרוטונין"], "correct": 0, "type": "single"}, {"q": "הנוירוטרנסמיטר הפוסט-גנגליוני (אחרי הגנגליון) במערכת הסימפתטית הוא בדרך כלל:", "options": ["נוראדרנלין (NA)", "אצטילכולין (ACh)", "דופמין", "GABA"], "correct": 0, "type": "single"}, {"q": "הנוירוטרנסמיטר הפוסט-גנגליוני במערכת הפרה-סימפתטית הוא:", "options": ["אצטילכולין (ACh)", "נוראדרנלין (NA)", "אדרנלין", "היסטמין"], "correct": 0, "type": "single"}, {"q": "הקולטן הפוסט-גנגליוני במערכת הפרה-סימפתטית הוא מסוג:", "options": ["מוסקריני (Muscarinic)", "ניקוטיני (Nicotinic)", "דופמינרגי", "GABA-ergic"], "correct": 0, "type": "single"}, {"q": "גירוי סימפתטי של הלב גורם ל:", "options": ["עלייה בקצב הלב", "ירידה בקצב הלב", "עצירת הלב", "אין השפעה"], "correct": 0, "type": "single"}, {"q": "גירוי פרה-סימפתטי (וגאלי) של הלב גורם ל:", "options": ["האטת קצב הלב", "עלייה בקצב הלב", "אין השפעה על הלב", "עצירת נשימה"], "correct": 0, "type": "single"}, {"q": "גירוי סימפתטי גורם באישון ל:", "options": ["הרחבה (Dilatation)", "כיווץ (Constriction)", "אין השפעה", "עיוורון מיידי"], "correct": 0, "type": "single"}, {"q": "גירוי פרה-סימפתטי גורם באישון ל:", "options": ["כיווץ (Constriction)", "הרחבה", "אין השפעה", "יובש בעין"], "correct": 0, "type": "single"}, {"q": "גירוי סימפתטי בכלי הדם של העור וההיקף גורם בדרך כלל ל:", "options": ["כיווץ כלי דם (Vasoconstriction)", "הרחבת כלי דם בכל המקרים", "אין השפעה", "עצירת זרימת דם מוחלטת"], "correct": 0, "type": "single"}, {"q": "גירוי סימפתטי על שריר הסמפוך (Bronchial muscle) גורם ל:", "options": ["הרפיה (הרחבת דרכי הנשימה)", "כיווץ", "אין השפעה", "שיתוק שריר"], "correct": 0, "type": "single"}, {"q": "גירוי פרה-סימפתטי על שריר הסמפוך גורם ל:", "options": ["כיווץ", "הרפיה", "אין השפעה", "הפרשת אדרנלין"], "correct": 0, "type": "single"}, {"q": "ה-Adrenal medulla מופעל על ידי המערכת הסימפתטית להפרשת:", "options": ["אדרנלין (Adrenaline)", "אצטילכולין", "אינסולין", "מלטונין"], "correct": 0, "type": "single"}, {"q": "גירוי פרה-סימפתטי גורם ל-Gastric glands ול-Salivary glands:", "options": ["הפרשה מוגברת", "עצירת הפרשה", "אין השפעה", "כאב"], "correct": 0, "type": "single"}, {"q": "גירוי סימפתטי גורם לסוגרים (Sphincters) של מערכת העיכול:", "options": ["כיווץ", "הרפיה והתרוקנות", "אין השפעה", "פתיחה מלאה"], "correct": 0, "type": "single"}, {"q": "גירוי פרה-סימפתטי גורם לדופן המעי (Colon wall) ולשלפוחית השתן:", "options": ["התכווצות מוגברת (עידוד ריקון)", "הרפיה מוחלטת", "אין השפעה", "כיווץ סוגרים בלבד ללא ריקון"], "correct": 0, "type": "single"}, {"q": "סעיפים פרה-סימפתטיים של עצב 7 (Facial) מעצבבים בין היתר את:", "options": ["בלוטות הדמע והרוק", "שרירי הלעיסה", "שרירי גלגל העין", "עור הפנים"], "correct": 0, "type": "single"}, {"q": "קשת רפלקס ויסצרלי (Visceral reflex arc) כוללת חמישה שלבים - מהו השלב הראשון?", "options": ["קולטן חושי בפנים (Sensory receptor in viscera)", "אפקטור ויסצרלי", "מסלול אפרנטי (Efferent pathway)", "מרכז שילוב (Integration center)"], "correct": 0, "type": "single"}, {"q": "במסלול היוצא (Efferent) של קשת הרפלקס הויסצרלי, כמה נוירונים בטור?", "options": ["שני נוירונים - פרה-גנגליוני ופוסט-גנגליוני", "נוירון אחד בלבד", "שלושה נוירונים", "ארבעה נוירונים"], "correct": 0, "type": "single"}, {"q": "בדוגמת רפלקס עליית לחץ דם, הקולטנים (ברורצפטורים) בסינוס הקרוטידי משדרים מידע דרך עצב:", "options": ["9 - Glossopharyngeal", "10 - Vagus בלבד", "7 - Facial", "3 - Oculomotor"], "correct": 0, "type": "single"}, {"q": "במסלול הרפלקס לירידת לחץ דם, ה-Integration center נמצא ב:", "options": ["מרכז לבבי במדולה אובלונגטה", "התלמוס", "הצרבלום", "האונה הפרונטלית"], "correct": 0, "type": "single"}, {"q": "במסלול הרפלקס לירידת לחץ דם, המסלול האפרנטי (היוצא) עובר דרך עצב:", "options": ["10 - Vagus", "9 - Glossopharyngeal", "7 - Facial", "12 - Hypoglossal"], "correct": 0, "type": "single"}, {"q": "השליטה המרכזית (Central control) על המערכת האוטונומית כוללת בין היתר:", "options": ["קורטקס פרונטלי, מערכת לימבית, היפותלמוס וגזע המוח", "רק חוט השדרה", "רק הצרבלום", "רק העצבים הקרניאליים"], "correct": 0, "type": "single"}, {"q": "ההיפותלמוס נחשב ל:", "options": ["מרכז השילוב הכללי (\"הבוס\") של המערכת האוטונומית", "מרכז השמיעה", "מרכז הראייה", "מרכז שיווי המשקל"], "correct": 0, "type": "single"}, {"q": "רפלקסים כמו השתנה, עשיית צרכים וזקפה נשלטים ברמת:", "options": ["חוט השדרה", "התלמוס בלבד", "הקורטקס בלבד", "האינסולה"], "correct": 0, "type": "single"}, {"q": "נוירונים חושיים ויסצרליים כלליים (General visceral sensory neurons) עוקבים אחר:", "options": ["מתיחה, טמפרטורה, שינויים כימיים וגירוי", "רק אור", "רק צליל", "רק טעם"], "correct": 0, "type": "single"}, {"q": "כאב ויסצרלי בדרך כלל נובע מ:", "options": ["גירוי כימי או דלקת", "חיתוך ישיר של האיבר בלבד", "אור בהיר", "רעש חזק"], "correct": 0, "type": "single"}, {"q": "גופי התא של נוירונים חושיים ויסצרליים ממוקמים ב:", "options": ["Dorsal root ganglion (DRG)", "הקרן הקדמית", "הצרבלום", "התלמוס בלבד"], "correct": 0, "type": "single"}, {"q": "אילו מהמשפטים על המערכת הסימפתטית נכונים? (בחר את כל הנכונים)", "options": ["מקורה תוראקולומברי", "הגנגליונים קרובים לעמוד השדרה", "אחראית ל-fight or flight", "הנוירוטרנסמיטר הפוסט-גנגליוני תמיד אצטילכולין"], "correct": [0, 1, 2], "type": "multi"}, {"q": "אילו מהמשפטים על המערכת הפרה-סימפתטית נכונים? (בחר את כל הנכונים)", "options": ["מקורה קרניו-סקרלי", "הגנגליונים קרובים לאיבר המטרה", "אחראית ל-rest and digest", "היא אחראית בלעדית לתגובת דחק"], "correct": [0, 1, 2], "type": "multi"}, {"q": "איזה מבנה תופס את הגומה הקדמית (Anterior fossa) של הגולגולת?", "options": ["האונה הפרונטלית", "הצרבלום וגזע המוח", "האונה הטמפורלית בלבד", "האונה האוקסיפיטלית"], "correct": 0, "type": "single"}, {"q": "איזה מבנה תופס את הגומה האחורית (Posterior fossa) של הגולגולת?", "options": ["הצרבלום וגזע המוח", "האונה הפרונטלית", "האונה הפריאטלית", "התלמוס"], "correct": 0, "type": "single"}, {"q": "הגומה האמצעית (Middle fossa) מכילה בין היתר את:", "options": ["האונה הטמפורלית", "הצרבלום", "חוט השדרה", "האונה האוקסיפיטלית"], "correct": 0, "type": "single"}, {"q": "Petrous ridge של עצם הטמפורל מפריד בין:", "options": ["הגומה האמצעית לגומה האחורית", "הגומה הקדמית לאמצעית", "שתי ההמיספרות", "שני החדרים הצדדיים"], "correct": 0, "type": "single"}, {"q": "איזה מבנה קושר בין החומר הלבן לגזרים המוטוריים, ועובר דרך ה-Internal Capsule אל גזע המוח?", "options": ["מסלול הקורטיקוספינלי", "מסלול הספינותלמי", "עצב הראייה", "עצב האולפקטורי"], "correct": 0, "type": "single"}, {"q": "מבחינה טופוגרפית, התלמוס והגרעינים הבזאליים ממוקמים:", "options": ["עמוק בתוך ההמיספרות, מתחת לקורטקס", "על פני הקורטקס בלבד", "בגזע המוח בלבד", "בצרבלום"], "correct": 0, "type": "single"}, {"q": "החדר השלישי גובל ישירות עם:", "options": ["התלמוס וההיפותלמוס", "הצרבלום בלבד", "האונה האוקסיפיטלית", "עצם הגולגולת ישירות"], "correct": 0, "type": "single"}, {"q": "כאשר מטופל מציג חולשה בפנים ובזרוע ימין עם דיבור לא שוטף (אך הבנה שמורה), הפגיעה הסבירה היא ב:", "options": ["אזור ברוקה בהמיספרה השמאלית (דומיננטית)", "אזור ורניקה בהמיספרה הימנית", "הצרבלום הימני", "עצב הטריגמינוס"], "correct": 0, "type": "single"}, {"q": "כאשר מטופל מדבר בשטף אך ללא הבנה (דיבור חסר משמעות), הפגיעה הסבירה היא ב:", "options": ["אזור ורניקה (Superior temporal gyrus / Inferior parietal lobule)", "אזור ברוקה", "הקורטקס המוטורי הראשי", "הצרבלום"], "correct": 0, "type": "single"}, {"q": "מטופל עם רעד במנוחה, נוקשות שרירים והאטה בתנועה - הפגיעה הסבירה היא ב:", "options": ["המערכת הדופמינרגית של הגרעינים הבזאליים (Substantia Nigra)", "הצרבלום", "עצב הטריגמינוס", "מסלול הספינותלמי"], "correct": 0, "type": "single"}, {"q": "מטופל עם חוסר יכולת לתאם תנועות אצבעות ורעד כוונתי בגפה - הפגיעה הסבירה היא ב:", "options": ["Intermediate (para-vermis) hemisphere של הצרבלום", "הגרעינים הבזאליים", "עצב הפאציאליס", "מסלול הקורטיקוספינלי בלבד"], "correct": 0, "type": "single"}, {"q": "מטופל עם אובדן תחושת כאב וטמפרטורה בצד ימין, וחולשה מוטורית וירידה בתחושת רטט בצד שמאל - מתאים ל:", "options": ["תסמונת בראון-סקווארד (חתך חצי-רוחבי משמאל)", "פגיעה סימטרית דו-צדדית", "פגיעה בעצב קרניאלי בלבד", "אין תסמונת כזו"], "correct": 0, "type": "single"}, {"q": "מטופל שאינו שם לב לצד שמאל של גופו וסביבתו (מתעלם ממנו) - הפגיעה הסבירה היא ב:", "options": ["האונה הפריאטלית הימנית (הלא-דומיננטית)", "האונה הפריאטלית השמאלית", "עצב הוסטיבולוקוכלארי", "הצרבלום"], "correct": 0, "type": "single"}, {"q": "כאב הראש הקשה ביותר בחיים (\"thunderclap headache\") מעורר חשד ל:", "options": ["דימום סאב-ארכנואידלי", "מיגרנה רגילה", "כאב ראש מתח", "כאב ראש סינוסים"], "correct": 0, "type": "single"}, {"q": "מטופל לאחר חבלת ראש עם \"lucid interval\" (הכרה תקינה ואז התדרדרות) חשוד ל:", "options": ["דימום אפידורלי (עקב פגיעה בעורק המנינגיאלי האמצעי)", "דימום סאב-ארכנואידלי ספונטני", "מחלת פרקינסון", "מיגרנה"], "correct": 0, "type": "single"}, {"q": "קשיש עם דימום כרוני איטי בעקבות נפילה קלה (בגלל ניוון מוחי ומתיחת ורידים גשריים) - חשוד ל:", "options": ["המטומה סובדורלית כרונית", "דימום אפידורלי חריף", "דימום סאב-ארכנואידלי", "אוטם מוחי איסכמי"], "correct": 0, "type": "single"}, {"q": "מטופל עם חולשת פנים מלאה (כולל המצח) בצד אחד - חשוד לפגיעת:", "options": ["LMN בעצב הפציאליס (7) עצמו", "UMN בקורטקס בלבד (שאז המצח נשמר)", "עצב הטריגמינוס", "עצב הוסטיבולוקוכלארי"], "correct": 0, "type": "single"}, {"q": "מטופל עם חולשת פנים תחתונה בלבד (המצח שמור) - חשוד לפגיעת:", "options": ["UMN (קורטיקלית) הפוגעת בעצב הפציאליס", "LMN בעצב עצמו", "עצב הגלוסופרינגאלי", "עצב הוגוס"], "correct": 0, "type": "single"}, {"q": "מנמוניקה \"Ooh Ooh Ooh to touch and feel very good velvet, AH\" משמשת לזכירת:", "options": ["שמות 12 העצבים הקרניאליים לפי הסדר", "שרירי גלגל העין", "ענפי עורק התרדמה הפנימי", "שכבות קרומי המוח"], "correct": 0, "type": "single"}, {"q": "מנמוניקה \"רופא שיניים נוסע באמבולנס גלובלי לפסטיגל\" משמשת לזכירת:", "options": ["סדר גרעיני הצרבלום העמוקים: Dentate, Emboliform, Globose, Fastigial", "סדר העצבים הקרניאליים", "שכבות הקורטקס", "ענפי העורק הבזילרי"], "correct": 0, "type": "single"}, {"q": "מנמוניקה \"טל בלחץ\" (T-L) משמשת לזכור את מיקום היציאה של:", "options": ["המערכת הסימפתטית (Thoraco-Lumbar)", "המערכת הפרה-סימפתטית", "עצבי הצוואר", "מסלול הראייה"], "correct": 0, "type": "single"}, {"q": "מטופל עם קושי בחישוב, בלבול ימין-שמאל, אגנוזיה של אצבעות ואגרפיה - זוהי תמונה קלאסית של:", "options": ["תסמונת גרסטמן (פגיעה פריאטלית דומיננטית)", "תסמונת בראון-סקווארד", "אפזיית ברוקה", "פרקינסוניזם"], "correct": 0, "type": "single"}];
+
+let sessionQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let answered = false;
+let userAnswers = []; // {qIndex, chosen:[], correct:bool}
+let currentShuffled = null; // {options:[], correctSet:Set}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+document.getElementById('totalQCount').textContent = `📚 ${ALL_QUESTIONS.length} שאלות בבנק`;
+
+const lenOptions = [10, 20, 40, 60, ALL_QUESTIONS.length];
+const lenLabels = ["10 שאלות","20 שאלות","40 שאלות","60 שאלות","הכל (" + ALL_QUESTIONS.length + ")"];
+let chosenLen = 20;
+const lenGrid = document.getElementById('lenGrid');
+lenOptions.forEach((n, idx) => {
+  const b = document.createElement('button');
+  b.className = 'len-btn' + (n === chosenLen ? ' selected' : '');
+  b.textContent = lenLabels[idx];
+  b.onclick = () => {
+    chosenLen = n;
+    document.querySelectorAll('.len-btn').forEach(x=>x.classList.remove('selected'));
+    b.classList.add('selected');
+  };
+  lenGrid.appendChild(b);
+});
+
+document.getElementById('startBtn').onclick = startQuiz;
+document.getElementById('restartBtn').onclick = () => {
+  document.getElementById('resultScreen').classList.add('hidden');
+  document.getElementById('startScreen').classList.remove('hidden');
+};
+document.getElementById('reviewBtn').onclick = toggleReview;
+
+function startQuiz(){
+  const pool = shuffle(ALL_QUESTIONS);
+  sessionQuestions = pool.slice(0, Math.min(chosenLen, pool.length));
+  currentIndex = 0;
+  score = 0;
+  userAnswers = [];
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('resultScreen').classList.add('hidden');
+  document.getElementById('quizScreen').classList.remove('hidden');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  answered = false;
+  const q = sessionQuestions[currentIndex];
+  const isMulti = q.type === 'multi';
+  document.getElementById('qCounter').textContent = `שאלה ${currentIndex+1} מתוך ${sessionQuestions.length}`;
+  document.getElementById('scoreChip').textContent = `🏆 ${score}`;
+  document.getElementById('progressBar').style.width = `${(currentIndex/sessionQuestions.length)*100}%`;
+  document.getElementById('qTag').textContent = isMulti ? '☑️ בחרו את כל התשובות הנכונות' : '🔘 בחרו תשובה אחת';
+  document.getElementById('qTag').className = 'q-tag' + (isMulti ? ' multi' : '');
+  document.getElementById('qText').textContent = q.q;
+
+  // build shuffled options with correctness tracking
+  const optIdxs = q.options.map((_, i) => i);
+  const shuffledIdxs = shuffle(optIdxs);
+  const correctSet = new Set(isMulti ? q.correct : [q.correct]);
+  currentShuffled = { order: shuffledIdxs, correctSet };
+
+  const wrap = document.getElementById('optionsWrap');
+  wrap.innerHTML = '';
+  shuffledIdxs.forEach((origIdx, pos) => {
+    const div = document.createElement('div');
+    div.className = 'opt' + (isMulti ? '' : ' radio');
+    div.dataset.orig = origIdx;
+    const letters = ['א','ב','ג','ד','ה','ו'];
+    div.innerHTML = `<span class="bullet">${letters[pos] || (pos+1)}</span><span class="opt-text">${q.options[origIdx]}</span>`;
+    div.onclick = () => selectOption(div, isMulti);
+    wrap.appendChild(div);
+  });
+
+  document.getElementById('feedbackBox').className = 'feedback-box';
+  document.getElementById('feedbackBox').textContent = '';
+  document.getElementById('checkBtn').classList.remove('hidden');
+  document.getElementById('checkBtn').disabled = true;
+  document.getElementById('nextBtn').classList.add('hidden');
+  document.getElementById('checkBtn').onclick = () => checkAnswer(isMulti);
+}
+
+function selectOption(div, isMulti){
+  if(answered) return;
+  if(isMulti){
+    div.classList.toggle('selected');
+  } else {
+    document.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+    div.classList.add('selected');
+  }
+  const anySelected = document.querySelectorAll('.opt.selected').length > 0;
+  document.getElementById('checkBtn').disabled = !anySelected;
+}
+
+function checkAnswer(isMulti){
+  if(answered) return;
+  answered = true;
+  const opts = Array.from(document.querySelectorAll('.opt'));
+  const chosenOrig = opts.filter(o=>o.classList.contains('selected')).map(o=>parseInt(o.dataset.orig));
+  const correctSet = currentShuffled.correctSet;
+  const chosenSet = new Set(chosenOrig);
+  let isCorrect = chosenSet.size === correctSet.size && [...chosenSet].every(x=>correctSet.has(x));
+
+  opts.forEach(o=>{
+    const orig = parseInt(o.dataset.orig);
+    o.classList.add('disabled');
+    if(correctSet.has(orig)){
+      o.classList.add('correct');
+    } else if(o.classList.contains('selected')){
+      o.classList.add('incorrect');
+    }
+  });
+
+  const fb = document.getElementById('feedbackBox');
+  fb.classList.add('show');
+  if(isCorrect){
+    score++;
+    fb.classList.add('correct');
+    fb.textContent = '🎉 תשובה נכונה! כל הכבוד';
+  } else {
+    fb.classList.add('incorrect');
+    fb.textContent = '❌ לא מדויק — התשובה הנכונה מסומנת בירוק';
+  }
+  document.getElementById('scoreChip').textContent = `🏆 ${score}`;
+
+  const q = sessionQuestions[currentIndex];
+  userAnswers.push({
+    question: q.q,
+    options: q.options,
+    correctSet: [...correctSet],
+    chosen: chosenOrig,
+    isCorrect
+  });
+
+  document.getElementById('checkBtn').classList.add('hidden');
+  document.getElementById('nextBtn').classList.remove('hidden');
+}
+
+document.getElementById('nextBtn').onclick = () => {
+  currentIndex++;
+  if(currentIndex >= sessionQuestions.length){
+    showResults();
+  } else {
+    renderQuestion();
+  }
+};
+
+function showResults(){
+  document.getElementById('quizScreen').classList.add('hidden');
+  document.getElementById('resultScreen').classList.remove('hidden');
+  const pct = Math.round((score/sessionQuestions.length)*100);
+  document.getElementById('resultScore').textContent = `${score} / ${sessionQuestions.length} (${pct}%)`;
+  let emoji = '🎉', sub = 'עבודה מצוינת!';
+  if(pct < 50){ emoji='💪'; sub='כדאי לחזור על החומר ולנסות שוב'; }
+  else if(pct < 75){ emoji='👍'; sub='לא רע בכלל, יש עוד לאן להשתפר'; }
+  else if(pct < 90){ emoji='🌟'; sub='עבודה טובה מאוד!'; }
+  else { emoji='🏆'; sub='שליטה מרשימה בחומר!'; }
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultSub').textContent = sub;
+  document.getElementById('progressBar').style.width = '100%';
+  const bar = document.getElementById('resultBar');
+  setTimeout(()=>{ bar.style.width = pct+'%'; bar.textContent = pct+'%'; }, 100);
+
+  const list = document.getElementById('reviewList');
+  list.innerHTML = '';
+  list.classList.add('hidden');
+  userAnswers.forEach((ua, i) => {
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (ua.isCorrect ? 'right' : 'wrong');
+    const correctTxt = ua.correctSet.map(idx=>ua.options[idx]).join(' | ');
+    const chosenTxt = ua.chosen.length ? ua.chosen.map(idx=>ua.options[idx]).join(' | ') : 'לא נבחרה תשובה';
+    div.innerHTML = `<b>${i+1}. ${ua.isCorrect ? '✅' : '❌'} ${ua.question}</b>
+      <div class="review-answer">התשובה שלכם: ${chosenTxt}</div>
+      <div class="review-answer">התשובה הנכונה: ${correctTxt}</div>`;
+    list.appendChild(div);
+  });
+}
+
+function toggleReview(){
+  document.getElementById('reviewList').classList.toggle('hidden');
+}
+</script>
+</body>
+</html>
