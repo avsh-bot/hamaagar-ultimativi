@@ -1,44 +1,37 @@
-// POST /api/remove — delete or hide an exam
-const fs = require('fs');
-const path = require('path');
-
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '6769';
+// POST /api/remove — delete an uploaded exam, or hide a built-in row.
+const { del } = require('@vercel/blob');
+const { readOverrides, writeOverrides, checkPassword } = require('./_store');
 
 module.exports = async (req, res) => {
-  const { password, id } = req.body;
-  
-  if (password !== ADMIN_PASSWORD) {
-    return res.status(401).json({ ok: false, error: 'סיסמה שגויה' });
+  res.setHeader('Cache-Control', 'no-store');
+  if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'method not allowed' });
+
+  const bad = checkPassword(req.body);
+  if (bad) return res.status(bad === 'סיסמה שגויה' ? 401 : 500).json({ ok: false, error: bad });
+
+  const id = req.body && req.body.id;
+  // the admin page probes this endpoint with a dummy id to verify the password
+  if (!id || id === '__login_check__') return res.json({ ok: true, check: true });
+
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    return res.status(500).json({ ok: false, error: 'אין Blob store מחובר לפרויקט.' });
   }
-  
-  if (!id) {
-    return res.status(400).json({ ok: false, error: 'חסר ID' });
-  }
-  
+
   try {
-    const catalogPath = path.join(__dirname, '..', 'data', 'catalog.json');
-    const catalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
-    
-    const idx = catalog.items.findIndex(i => i.id === id);
-    if (idx === -1) {
-      return res.status(404).json({ ok: false, error: 'פריט לא נמצא' });
+    const ov = await readOverrides();
+    const i = ov.items.findIndex(x => x.id === id);
+
+    if (i >= 0) {
+      const item = ov.items[i];
+      if (item.url) { try { await del(item.url); } catch (e) { /* file already gone — carry on */ } }
+      ov.items.splice(i, 1);
+    } else if (!ov.hidden.includes(id)) {
+      ov.hidden.push(id);
     }
-    
-    const item = catalog.items[idx];
-    
-    // Built-in: hide. Uploaded: delete.
-    if (item.builtin) {
-      item.status = 'empty';
-      delete item.url;
-    } else {
-      catalog.items.splice(idx, 1);
-    }
-    
-    fs.writeFileSync(catalogPath, JSON.stringify(catalog, null, 2));
-    
+
+    await writeOverrides(ov);
     res.json({ ok: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ ok: false, error: err.message });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: 'שגיאה במחיקה: ' + (e.message || e) });
   }
 };
